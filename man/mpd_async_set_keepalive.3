@@ -5,7 +5,7 @@ mpd_async_set_keepalive \- enables/disables TCP keepalives
 .nf
 .B #include <mpd/async.h>
 .PP
-.BI "void mpd_async_set_keepalive(struct mpd_async *" async ", bool " keepalive );
+.BI "bool mpd_async_set_keepalive(struct mpd_async *" async ", bool " keepalive );
 .fi
 .SH DESCRIPTION
 The
@@ -15,18 +15,15 @@ long-idled connections to persist on some networks that would otherwise
 terminate inactive TCP sessions.
 .PP
 The default behavior is to not use TCP keepalives.
+.PP
+.SH RETURN VALUE
+.BR mpd_async_set_keepalive ()
+returns true on success, false otherwise.
 .SH ERRORS
 The 
 .BR mpd_async_set_keepalive ()
 function uses internally the function
-.BR "setsockopt()" ;
-errors can be checked only if
-.IR errno
-has been set to zero before calling
-.BR mpd_async_set_keepalives (),
-and 
-.IR errno 
-is rechecked after the call.
+.BR "setsockopt()".
 .SH HISTORY
 The function
 .BR mpd_async_set_keepalive ()
