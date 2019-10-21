@@ -1,0 +1,40 @@
+.TH MPD_SEND_ALLOWED_COMMANDS 3 2019
+.SH NAME
+mpd_send_allowed_commands, mpd_send_disallowed_commands \- request the list of
+allowed/disallowed commands
+.SH SYNOPSIS
+.nf
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_allowed_commands(struct mpd_connection *"connection );
+.PP
+.BI "bool mpd_send_disallowed_commands(struct mpd_connection *"connection );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_send_allowed_commands ()
+requests a list of supported and allowed commands. The user should use
+.BR mpd_recv_command_pair ()
+to obtain the list of command pairs.
+.PP
+The
+.BR mpd_send_disallowed_commands ()
+requests a list of disallowed commands. The user should use
+.BR mpd_recv_command_pair ()
+to obtain the list of command pairs.
+.SH RETURN VALUE
+.BR mpd_send_allowed_commands ()
+and
+.BR mpd_send_disallowed_commands ()
+return true on success, false otherwise. Both functions are wrappers of
+.BR mpd_send_command ().
+.SH ERRORS
+If these functions returned false, the user should use one of the error
+functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_recv_command_pair (3),
+.BR mpd_send_command (3),
+.BR mpd_connection_new (3),
+.BR mpd_connect_new_async (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3)

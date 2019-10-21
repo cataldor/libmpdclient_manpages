@@ -1,0 +1,148 @@
+.TH MPD_SEND_DISABLE_TAG_TYPES 3 2019
+.SH NAME
+mpd_send_disable_tag_types, mpd_run_disable_tag_types, 
+mpd_send_enable_tag_types, mpd_run_enable_tag_types, mpd_send_clear_tag_types,
+mpd_run_clear_tag_types\- operates on the list of tag types
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_disable_tag_types(struct mpd_connection *" connection
+.BI "const enum mpd_tag_types *" types ,
+.BI "unsigned " n );
+.PP
+.BI "bool mpd_send_enable_tag_types(struct mpd_connection *" connection
+.BI "const enum mpd_tag_types *" types ,
+.BI "unsigned " n );
+.PP
+.BI "bool mpd_send_clear_tag_types(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_disable_tag_types(struct mpd_connection *" connection
+.BI "const enum mpd_tag_types *" types ,
+.BI "unsigned " n );
+.PP
+.BI "bool mpd_run_enable_tag_types(struct mpd_connection *" connection
+.BI "const enum mpd_tag_types *" types ,
+.BI "unsigned " n );
+.PP
+.BI "bool mpd_run_clear_tag_types(struct mpd_connection *" connection );
+.PP
+.SH DESCRIPTION
+The
+.BR mpd_send_disable_tag_types ()
+function removes one or more tags from the list of tag types the client is
+interested in. The parameter
+.IR types
+is an array of tag types to disable and
+.IR n
+is the number of tag types in said array. The
+.BR mpd_run_disable_tag_types ()
+is a shortcut for
+.BR mpd_send_disable_tag_types ()
+and
+.BR mpd_response_finish().
+.PP
+The
+.BR mpd_send_enable_tag_types ()
+function enables one or more tags from the list of tag types the client is
+interested in. The parameter
+.IR types
+is an array of tag types to enable and
+.IR n
+is the number of tag types in said array. The
+.BR mpd_run_enable_tag_types ()
+is a shortcut for
+.BR mpd_send_enable_tag_types ()
+and
+.BR mpd_response_finish().
+.PP
+The
+.BR mpd_send_clear_tag_types ()
+function clears the list of tags the client is interested in. This means that
+MPD will not send any tags to this client. The
+.BR mpd_run_clear_tag_types ()
+is a shortcut for
+.BR mpd_send_clear_tag_types ()
+and
+.BR mpd_response_finish().
+.PP
+.SS The mpd_tag_type enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * @since libmpdclient 2.10 added support for
+ * #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.  
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and
+ * #MPD_TAG_ALBUM_ARTIST_SORT.
+ */
+enum mpd_tag_type
+{
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
+	MPD_TAG_ARTIST,
+	MPD_TAG_ALBUM,
+	MPD_TAG_ALBUM_ARTIST,
+	MPD_TAG_TITLE,
+	MPD_TAG_TRACK,
+	MPD_TAG_NAME,
+	MPD_TAG_GENRE,
+	MPD_TAG_DATE,
+	MPD_TAG_COMPOSER,
+	MPD_TAG_PERFORMER,
+	MPD_TAG_COMMENT,
+	MPD_TAG_DISC,
+
+	MPD_TAG_MUSICBRAINZ_ARTISTID,
+	MPD_TAG_MUSICBRAINZ_ALBUMID,
+	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
+	MPD_TAG_MUSICBRAINZ_TRACKID,
+	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+
+	MPD_TAG_ORIGINAL_DATE,
+
+	MPD_TAG_ARTIST_SORT,
+	MPD_TAG_ALBUM_ARTIST_SORT,
+
+	MPD_TAG_ALBUM_SORT,
+
+	/* IMPORTANT: the ordering of tag types above must be
+	   retained, or else the libmpdclient ABI breaks */
+
+	MPD_TAG_COUNT
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_send_disable_tag_types (),
+.BR mpd_send_enabled_tag_types (),
+.BR mpd_send_clear_tag_types ()
+return true on success, false otherwise. These functions are wrappers of
+.BR mpd_send_command ().
+.PP
+.BR mpd_run_disable_tag_types (),
+.BR mpd_run_enabled_tag_types (),
+.BR mpd_run_clear_tag_types ()
+return true on success, false otherwise. These functions are wrappers of
+.BR mpd_send_command ()
+and
+.BR mpd_response_finish ().
+.SH ERRORS
+If the functions return false, the user should use one of the error functions
+of libmpdclient.
+.SH HISTORY
+The functions first appeared in libmpdclient 2.12 and MPD 0.21.
+.SH SEE ALSO
+.BR mpd_send_command(3),
+.BR mpd_response_finish (3),
+.BR mpd_connection_new (3),
+.BR mpd_connect_new_async (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3)

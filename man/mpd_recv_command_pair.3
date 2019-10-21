@@ -1,0 +1,59 @@
+.TH MPD_RECV_COMMAND_PAIR 3 2019
+.SH NAME
+mpd_recv_command_pair \- receives the next supported command
+.SH SYNOPSIS
+.nf
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_pair *mpd_recv_command_pair(struct mpd_connection *" connection );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_recv_command_pair ()
+receives the next supported command. This function should be used in a loop
+after calling
+.BR mpd_send_allowed_commands ()
+or
+.BR mpd_send_disallowed_commands ().
+.PP
+Additionally, the returned value should be freed by calling
+.BR mpd_return_pair ().
+.SS The mpd_pair structure
+The
+.BR mpd_recv_command_pair ()
+returns a
+.I mpd_pair
+structure, which is defined as:
+.PP
+.in +4n
+.EX
+/**
+ * A name-value pair received from the MPD server.
+ */
+struct mpd_pair {
+	/** the name of the element */
+	const char *name;
+
+	/** the value of the element */
+	const char *value;
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_recv_command_pair ()
+returns a command or NULL on (i) error or (ii) if the end of the response has
+been reached.
+.SH ERRORS
+If 
+.BR mpd_recv_command_pair ()
+returned NULL, the user should use one of the error functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_send_allowed_commands(3),
+.BR mpd_send_disallowed_commands(3),
+.BR mpd_return_pair (3),
+.BR mpd_recv_pair_named (3),
+.BR mpd_connection_new (3),
+.BR mpd_connect_new_async (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3)

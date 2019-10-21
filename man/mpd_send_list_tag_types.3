@@ -1,0 +1,67 @@
+.TH MPD_SEND_LIST_TAG_TYPES 3 2019
+.SH NAME
+mpd_send_list_tag_types, mpd_recv_tag_pair \- requests/receives a list 
+of supported tag types
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_list_tag_types(struct mpd_connection *"connection );
+.PP
+.BI "struct mpd_pair *mpd_recv_tag_type_pair(struct"
+.BI "mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_send_list_tag_types ()
+requests a list of supported tag types. The user should use
+.BR mpd_recv_tag_type_pair ()
+to obtain the list of tag pairs.
+.PP
+.BR mpd_recv_tag_type_pair ()
+returns one tag of the
+.BR mpd_send_list_tag_types ()
+response. Free the returned value with
+.BR mpd_return_pair ().
+
+.SS The mpd_pair structure
+The
+.BR mpd_recv_tag_types_pair ()
+returns a
+.I mpd_pair
+structure, which is defined as:
+.PP
+.in +4n
+.EX
+/**
+ * A name-value pair received from the MPD server.
+ */
+struct mpd_pair {
+	/** the name of the element */
+	const char *name;
+
+	/** the value of the element */
+	const char *value;
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_send_list_tag_types ()
+returns true on success, false otherwise. The function is a wrapper of
+.BR mpd_send_command ().
+.PP
+.BR mpd_recv_tag_types_pair ()
+returns a tagtype pair, or NULL on error of if the end of the response is
+reached.
+.SH ERRORS
+If 
+.BR mpd_send_list_tag_types()
+or
+.BR mpd_recv_tag_type_pair()
+function return false and NULL (respectively), the user should use one of the
+error functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_send_command(3),
+.BR mpd_connection_new (3),
+.BR mpd_connect_new_async (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3)

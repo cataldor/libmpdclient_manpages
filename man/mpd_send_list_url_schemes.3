@@ -1,0 +1,67 @@
+.TH MPD_SEND_LIST_URL_SCHEMES 3 2019
+.SH NAME
+mpd_send_list_url_schemes, mpd_recv_url_scheme_pair \- requests/receives a list 
+of supported URL handlers
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_list_url_schemes(struct mpd_connection *"connection );
+.PP
+.BI "struct mpd_pair *mpd_recv_url_scheme_pair(struct"
+.BI "mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_send_list_url_schemes ()
+requests a list of supported URL handles in the form 'scheme://' 
+(for example, http://). The user should use
+.BR mpd_recv_url_scheme_pair ()
+to obtain the list of handler pairs.
+.PP
+.BR mpd_recv_url_scheme_pair ()
+returns one line of the
+.BR mpd_send_list_url_schemes()
+response. Free the returned value with
+.BR mpd_return_pair ().
+.SS The mpd_pair structure
+The
+.BR mpd_recv_url_sheme_pair ()
+returns a
+.I mpd_pair
+structure, which is defined as:
+.PP
+.in +4n
+.EX
+/**
+ * A name-value pair received from the MPD server.
+ */
+struct mpd_pair {
+	/** the name of the element */
+	const char *name;
+
+	/** the value of the element */
+	const char *value;
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_send_list_url_schemes ()
+returns true on success, false otherwise. The function is a wrapper of
+.BR mpd_send_command ().
+.PP
+.BR mpd_recv_url_scheme_pair ()
+returns a handler pair, or NULL on (i) error or (ii) if the end of the response
+is reached.
+.SH ERRORS
+If 
+.BR mpd_send_list_url_schemes()
+or
+.BR mpd_recv_url_scheme_pair()
+function return false and NULL (respectively), the user should use one of the
+error functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_send_command(3),
+.BR mpd_connection_new (3),
+.BR mpd_connect_new_async (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3)
