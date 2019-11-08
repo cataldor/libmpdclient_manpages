@@ -1,0 +1,107 @@
+.TH MPD_CONNECTION_GET_SERVER_ERROR 3 2019
+.SH NAME
+mpd_connection_get_server_error, mpd_connection_get_server_error_location,
+mpd_connection_get_server_version, mpd_connection_cmp_server_version \- fetch
+server information
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "enum mpd_server_error mpd_connection_get_server_error(const struct "
+.BI "mpd_connection *" connection );
+.PP
+.BI "unsigned mpd_connection_get_server_error_location(const struct "
+.BI "mpd_connection *" connection );
+.PP
+.BI "const unsigned *mpd_connection_get_server_version(const struct "
+.BI "mpd_connection *" connection );
+.PP
+.BI "int mpd_connection_cmp_server_version(const struct "
+.BI "mpd_connection *" connection ,
+.BI "unsigned " major ", unsigned " minor ", unsigned " patch );
+.SH DESCRIPTION
+The
+.BR mpd_connection_get_server_error ()
+returns information about the last error encountered on the server. Calling
+this function is only valid if
+.BR mpd_connection_get_error ()
+returned
+.IR MPD_ERROR_SERVER .
+.PP
+The
+.BR mpd_connection_get_server_error_location ()
+returns the index within the command list (i.e., location of the server error).
+Calling this function is only valid in a command list response, and if
+.BR mpd_connection_get_error ()
+returned
+.IR MPD_ERROR_SERVER .
+.PP
+The
+.BR mpd_connection_get_server_version ()
+returns a three-tuple containg the major, minor, and patch version of the MPD
+protocol.
+.PP
+The
+.BR mpd_connection_cmp_server_version ()
+compares the MPD protocol version with the specified three-tuple. It returns
+-1 if the server is older, 1 if it is newer, or 0 if it is equal.
+.SS The mpd_server_error enum
+The
+.BR mpd_connection_get_server_error ()
+function returns a
+.I mpd_server_error
+enum, which has one of the following values:
+.PP
+.in +4n
+.EX
+enum mpd_server_error {
+	MPD_SERVER_ERROR_UNK = -1,
+
+	MPD_SERVER_ERROR_NOT_LIST = 1,
+	MPD_SERVER_ERROR_ARG = 2,
+	MPD_SERVER_ERROR_PASSWORD = 3,
+	MPD_SERVER_ERROR_PERMISSION = 4,
+	MPD_SERVER_ERROR_UNKNOWN_CMD = 5,
+
+	MPD_SERVER_ERROR_NO_EXIST = 50,
+	MPD_SERVER_ERROR_PLAYLIST_MAX = 51,
+	MPD_SERVER_ERROR_SYSTEM = 52,
+	MPD_SERVER_ERROR_PLAYLIST_LOAD = 53,
+	MPD_SERVER_ERROR_UPDATE_ALREADY = 54,
+	MPD_SERVER_ERROR_PLAYER_SYNC = 55,
+	MPD_SERVER_ERROR_EXIST = 56,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+The
+.BR mpd_connection_get_server_error ()
+function returns a 
+.I mpd_server_error
+object.
+.PP
+The
+.BR mpd_connection_get_server_error_location ()
+fuction returns the the index within the command list.
+.PP
+The
+.BR mpd_connection_get_server_version () 
+returns a three-tuple pointer containing the major, minor and patch version of
+the MPD protocol.
+.PP
+The
+.BR mpd_connection_cmp_server_version ()
+returns an integer less than, equal to, or greater than zero if the server
+version is found, respectively, to be less than, to match, or be greater than
+the specified version.
+.SH ERRORS
+No errors are defined.
+.SH HISTORY
+The function
+.BR mpd_connection_get_server_error_location ()
+first appeared in libmpdclient 2.4.
+.SH SEE ALSO
+.BR mpd_connection_new (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_system_error (3),
+.BR mpd_connection_clear_error (3)

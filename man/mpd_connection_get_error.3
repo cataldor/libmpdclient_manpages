@@ -1,0 +1,98 @@
+.TH MPD_CONNECTION_GET_ERROR 3 2019
+.SH NAME
+mpd_connection_get_error, mpd_connection_get_error_message \- fetch the error 
+code
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "enum mpd_error mpd_connection_get_error(const struct "
+.BI "mpd_connection *" connection );
+.PP
+.BI "const char *mpd_connection_get_error_message(const struct "
+.BI "mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_connection_get_error ()
+returns information about the last error encountered. If no error has occured,
+it returns
+.IR MPD_ERROR_SUCCESS .
+.PP
+The
+.BR mpd_connection_get_error_message ()
+returns the human-readable libmpdclient error message. Calling this function is
+only valid if an error really occured, check with
+.BR mpd_connection_get_error ().
+.PP
+For
+.IR MPD_ERROR_SERVER ,
+the error message is encoded in UTF-8.
+.IR MPD_ERROR_SERVER
+obtains its error message from the operating system, and thus the locale's 
+character set (and probably language) is used. Keep that in mind when you print
+error messages.
+.SS The mpd_error enum
+The
+.BR mpd_connection_get_error ()
+function returns a
+.I mpd_error
+enum, which has one of the following values:
+.PP
+.in +4n
+.EX
+enum mpd_error {
+	/** no error */
+	MPD_ERROR_SUCCESS = 0,
+
+	/** out of memory */
+	MPD_ERROR_OOM,
+
+	/** a function was called with an unrecognized or invalid
+	    argument */
+	MPD_ERROR_ARGUMENT,
+
+	/** a function was called which is not available in the
+	    current state of libmpdclient */
+	MPD_ERROR_STATE,
+
+	/** timeout trying to talk to mpd */
+	MPD_ERROR_TIMEOUT,
+
+	/** system error */
+	MPD_ERROR_SYSTEM,
+
+	/** unknown host */
+	MPD_ERROR_RESOLVER,
+
+	/** malformed response received from MPD */
+	MPD_ERROR_MALFORMED,
+
+	/** connection closed by mpd */
+	MPD_ERROR_CLOSED,
+
+	/**
+	 * The server has returned an error code, which can be queried
+	 * with mpd_connection_get_server_error().
+	 */
+	MPD_ERROR_SERVER,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+The
+.BR mpd_connection_get_connection ()
+function returns a 
+.I mpd_error
+object.
+.PP
+The
+.BR mpd_connection_get_error_message ()
+fuction returns the human-readable libmpdclient error message in string format.
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_connection_new (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_server_error_location (3),
+.BR mpd_connection_get_system_error (3),
+.BR mpd_connection_clear_error (3)

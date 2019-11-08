@@ -1,0 +1,29 @@
+.TH MPD_CONNECTION_GET_SETTINGS 3 2019
+.SH NAME
+mpd_connection_get_settings \- fetch settings used to connect to the MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "const struct mpd_settings *mpd_connection_get_settings(const struct
+.BI "mpd_connecton *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_connection_get_settings ()
+returns the settings which were used to connect to the server. It may be NULL
+if the settings are not known.
+.SH RETURN VALUE
+The
+.BR mpd_connection_get_settings ()
+function returns a pointer to the opaque object
+.IR "struct mpd_settings" .
+It may return NULL if the settings are not known.
+.SH ERRORS
+No errors are defined.
+.SH HISTORY
+This function was added since libmpdclient 2.4.
+.SH SEE ALSO
+.BR mpd_settings_free (3),
+.BR mpd_settings_get_host (3),
+.BR mpd_settings_get_port (3),
+.BR mpd_settings_get_timeout_ms (3),
+.BR mpd_settings_get_password (3)

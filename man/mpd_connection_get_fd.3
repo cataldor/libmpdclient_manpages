@@ -1,0 +1,48 @@
+.TH MPD_CONNECTION_GET_FD 3 2019
+.SH NAME
+mpd_connection_get_fd, mpd_connection_get_async \- Fetch objects from the
+mpd_connection object 
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "int mpd_connection_get_fd(const struct mpd_connecton *" fd );
+.PP
+.BI "struct mpd_async *mpd_connection_get_async(struct "
+.BI "mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_connection_get_fd ()
+returns the file descriptor which should be polled by the caller. Do not use
+the file descriptor for anything except polling! The file descriptor never 
+changes during the lifetime of this
+.IR mpd_connection
+object.
+.PP
+The
+.BR mpd_connection_get_async ()
+returns the underlying
+.IR mpd_async
+object. This can be used to send commands asynchronously. During an 
+asynchronous command, you must
+.IR not
+use synchronous
+.IR mpd_connection
+functions until the asynchronous response has been finished. If an error occurs
+while using
+.IR mpd_async ,
+you must close the 
+.IR mpd_connection .
+.SH RETURN VALUE
+.BR mpd_connection_get_fd ()
+and
+.BR mpd_connection_get_async ()
+return the file descriptor and
+.IR mpd_async
+object, respectively.
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_connection_new (3),
+.BR mpd_connection_new_async (3),
+.BR mpd_connection_get_server_version (3),
+.BR mpd_connection_free (3)

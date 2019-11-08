@@ -1,0 +1,27 @@
+.TH MPD_CONNECTION_CLEAR_ERROR 3 2019
+.SH NAME
+mpd_connection_clear_error \- Attempts to recover from an error condition
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.nf
+.PP
+.BI "bool mpd_connection_clear_error(struct mpd_connection *" connection );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_connection_clear_error ()
+attempts to recover from an error condition. This function 
+.I must 
+be called after
+a non-fatal error before you can continue using this 
+.I mpd_connection
+object.
+.SH RETURN VALUE
+The
+.BR mpd_connection_clear_error ()
+returns true on success, false if the error is fatal and cannot be recovered.
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_connection_new (3),
+.BR mpd_connection_get_error (3),

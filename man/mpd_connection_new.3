@@ -1,0 +1,99 @@
+.TH MPD_CONNECTION_NEW 3 2019
+.SH NAME
+mpd_connection_new, mpd_connection_new_async, mpd_connection_free \- 
+creates/frees a MPD connection
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_connection *mpd_connection_new(const char *" host ,
+.BI "unsigned " port ", unsigned " timeout_ms );
+.PP
+.BI "struct mpd_connection *mpd_connection_new_async(struct mpd_async *" sync ,
+.BI "const char *" welcome );
+.PP
+.BI "void mpd_connection_free(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_connection_new ()
+returns a pointer for a newly allocated 
+.IR "struct mpd_connection"
+to a MPD server. Both the name server lookup and the
+.BR connect()
+call are done synchronously. 
+.PP
+The function receives the server's host name, IP address or Unix socket path
+.IR host .
+If the resolver returns more than one IP address for a host name, this function
+tries all of them until one accepts the connection. The
+.IR host
+parameter can be NULL, which will connect to the default host (using the
+.BR MPD_HOST
+environment variable if present). Additionally, the function receives
+the TCP port
+.IR port
+to connect to, or 0 for default port (using the 
+.BR MPD_PORT
+environment if present). If
+.IR host
+is a Unix socket path, this parameter is ignored. Finally, the function receives
+the timeout
+.IR timeout_ms
+in milliseconds, or 0 for the default timeout (the environment variable
+.BR MPD_TIMEOUT
+may specify a timeout in seconds); you may modify it later with
+.BR mpd_connection_set_timeout ().
+.PP
+The
+.BR mpd_connect_new_async ()
+function returns a pointer to a new
+.IR "struct mpd_connection"
+object based on an existing asynchronous MPD connection. You should not continue
+to use the
+.IR "struct mpd_async"
+object. Note that
+.BR mpd_connect_free ()
+also frees your
+.IR "struct mpd_async"
+object.
+.PP
+This function does not block at all, which is why you have to pass the
+.IR welcome
+message to it.
+.PP
+The function receives the asynchronous MPD connection
+.IR async
+and the first line sent by MPD
+.IR welcome
+message.
+.SH RETURN VALUE
+The
+.BR mpd_connection_new ()
+and
+.BR mpd_connection_new_async ()
+functions return a pointer to the opaque object
+.IR "struct mpd_connection".
+They return NULL if insufficient memory was available.
+.PP
+The
+.BR mpd_connection_free ()
+has no return value.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient
+.IR "even if a pointer has been returned"
+for functions
+.BR mpd_connection_new ()
+and
+.BR mpd_connection_new_async () .
+.SH HISTORY
+The support for environment variables
+.BR MPD_HOST ,
+.BR MPD_PORT ,
+.BR MPD_TIMEOUT
+was added since libmpdclient 2.3.
+.SH SEE ALSO
+.BR mpd_async_new (3),
+.BR mpd_connection_set_timeout (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3),

@@ -1,0 +1,46 @@
+.TH MPD_CONNECTION_SET_KEEPALIVE 3 2019
+.SH NAME
+mpd_connection_set_keepalive, mpd_connection_set_timeout \- Tune connection
+parameters
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "void mpd_connection_set_keepalive(struct mpd_connecton *" connection ,
+.BI "bool " keepalive );
+.PP
+.BI "void mpd_connection_set_timeout(struct mpd_connection *" connection ,
+.BI "unsigned "timeout_ms );
+.SH DESCRIPTION
+The
+.BR mpd_connection_set_keepalive ()
+enables/disables TCP keepalives. Keppalives are enabled using the SO_KEEPALIVE
+socket option. They may be required for long-idled connections to persist on
+some networks that would otherwise terminate inactive TCP sessions.
+.PP
+The parameter
+.IR keepalive
+determines the use or not of TCP keepalives. The default is false.
+.PP
+The
+.BR mpd_connection_set_timeout ()
+sets the timeout for synchronous operations. If the MPD server does not send a
+response during this time span, the operation is aborted by libmpdclient.
+.PP
+The parameter
+.IR timeout_ms
+sets the desired timeout in milliseconds.
+.IR "It must not be zero" ;
+Otherwise, the initial value is the one passed to
+.BR mpd_connection_new ().
+If you have used
+.BR mpd_connection_new_async (),
+then the default value is 30 seconds.
+.SH ERRORS
+No errors are defined.
+.SH HISTORY
+.BR mpd_connection_set_keepalive ()
+was added since libmpdclient 2.10.
+.SH SEE ALSO
+.BR mpd_connection_new (3),
+.BR mpd_connection_new_async (3),
+.BR mpd_connection_get_fd (3),
