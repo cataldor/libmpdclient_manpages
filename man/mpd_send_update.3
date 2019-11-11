@@ -1,0 +1,85 @@
+.TH MPD_SEND_UPDATE 3 2019
+.SH NAME
+mpd_send_update, mpd_send_rescan, mpd_recv_update_id, mpd_run_update,
+mpd_run_rescan \- update the MPD server database
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_update(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.PP
+.BI "bool mpd_send_rescan(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.PP
+.BI "unsigned mpd_recv_update_id(struct mpd_connection *" connection );
+.PP
+.BI "unsigned mpd_run_update(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.PP
+.BI "unsigned mpd_run_rescan(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.SH DESCRIPTION
+The
+.BR mpd_send_update ()
+instructs MPD to update the music database: find new files, remove deleted
+files, update modified files. The
+.BR mpd_send_update ()
+receives the
+.I mpd_connection
+object and an optional
+.I path
+to update; if NULL, then all of the music directory is updated.
+.PP
+The
+.BR mpd_send_rescan ()
+works like
+.BR mpd_send_update () ,
+but also rescans unmodified files. It also receives a
+.I mpd_connection
+object and an optional
+.I path
+to update; if NULL, then all of the music directory is updated.
+.PP
+The
+.BR mpd_recv_update_id ()
+receives the id of the update job which was submitted by
+.BR mpd_send_update () .
+The function receives the
+.I mpd_connection
+object.
+.PP
+The
+.BR mpd_run_update ()
+is a shortcut for
+.BR mpd_send_update ()
+and
+.BR mpd_recv_update_id () .
+.PP
+The
+.BR mpd_run_rescan ()
+works like
+.BR mpd_run_update () ,
+but also rescans unmodified files. It receives the
+.I mpd_connection
+object and an optional
+.I path
+to update; if NULL, then all of the music directory is updated.
+.SH RETURN VALUE
+.BR mpd_send_update ()
+and
+.BR mpd_send_rescan ()
+return true on success, false on error.
+.BR mpd_recv_update_id () ,
+.BR mpd_run_update ()
+and
+.BR mpd_run_rescan ()
+return a positive job id on success, 0 on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_connection_new(3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

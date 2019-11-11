@@ -1,0 +1,95 @@
+.TH MPD_SEND_LIST_ALL 3 2019
+.SH NAME
+mpd_send_list_all, mpd_send_list_all_meta, mpd_send_list_meta,
+mpd_send_list_files \- Get a list from the MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_list_all(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.PP
+.BI "bool mpd_send_list_all_meta(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.PP
+.BI "bool mpd_send_list_meta(struct mpd_connection *" connection ", const" 
+.BI "char *" path );
+.PP
+.BI "bool mpd_send_list_files(struct mpd_connection *" connection ", const"
+.BI "char *" uri );
+.SH DESCRIPTION
+The
+.BR mpd_send_list_all ()
+function gets a recursive list of all directories, songs and playlist from MPD.
+They are returned without metadata. This is a rather expansive operation,
+because the response may be large. The
+.BR mpd_send_list_all ()
+receives the
+.I mpd_connection
+object and an optional base
+.I path
+for the query.
+.PP
+The
+.BR mpd_send_list_all_meta ()
+behaves as
+.BR mpd_send_list_all ()
+but also returns metadata. This operation is even more expansive, because the
+response is larger. If it is larger than a configurable server-side limit,
+MPD may disconect you. To read the response, you should use
+.BR mpd_recv_entity () .
+The
+.BR mpd_send_list_all_meta ()
+receives the
+.I mpd_connection
+object and an optional base
+.I path
+for the query.
+.PP
+The
+.BR mpd_send_list_meta ()
+gets a list of directories, songs and playlist in the from MPD, including
+metadata (not recursive). To read the response, you should use 
+.BR mpd_recv_entity () .
+The
+.BR mpd_send_list_meta ()
+receives the
+.I mpd_connection
+object and the optional directory
+.I path
+to be listed.
+.PP
+The
+.BR mpd_send_list_files ()
+lists the contents of the specified
+.I uri
+directory, including files that are not recognized by MPD (command "listfiles").
+To read the response, you may use
+.BR mpd_recv_entity () .
+All regular files will be reported as
+.IR MPD_ENTITY_TYPE_SONG ,
+even if they are not actually songs. The
+.BR mpd_send_list_files ()
+receives the
+.I mpd_connection
+object and the directory
+.I uri
+to be listed.
+.SH RETURN VALUE
+.BR mpd_send_list_all ()
+.BR mpd_send_list_all_meta ()
+.BR mpd_send_list_meta ()
+.BR mpd_send_list_files ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_list_files ()
+function was added since libmpdclient 2.12 (and MPD 0.19).
+.SH SEE ALSO
+.BR mpd_recv_entity (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

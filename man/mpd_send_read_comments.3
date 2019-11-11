@@ -1,0 +1,38 @@
+.TH MPD_SEND_READ_COMMENTS 3 2019
+.SH NAME
+mpd_send_read_comments \- read the comments of a song file
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_read_comments(struct mpd_connection *" connection ", const"
+.BI "char *" path );
+.SH DESCRIPTION
+The
+.BR mpd_send_read_comments ()
+reads the "comments" of a song file. This returns key/value pairs which can be
+read using
+.BR mpd_recv_pair () .
+The
+.BR mpd_send_read_comments()
+receives the
+.I mpd_connection
+object and the relative
+.I path
+of the song file within the music directory or an arbitrary file path starting
+with file:///.
+.SH RETURN VALUE
+.BR mpd_send_read_comments ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_read_comments ()
+function was added since libmpdclient 2.9.
+.SH SEE ALSO
+.BR mpd_recv_pair (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
