@@ -1,0 +1,105 @@
+.TH MPD_DIRECTORY_DUP 3 2019
+.SH NAME
+mpd_directory_dup, mpd_directory_free, mpd_directory_get_path,
+mpd_directory_get_last_modified, mpd_directory_begin, mpd_directory_feed,
+mpd_recv_directory \- manipulates the mpd_directory object
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_directory *mpd_directory_dup(const "
+.BI "struct mpd_directory *" directory ); 
+.PP
+.BI "void mpd_directory_free(struct mpd_directory *" directory  );
+.PP
+.BI "const char *mpd_directory_get_path(const "
+.BI "struct mpd_directory *" directory );
+.PP
+.BI "time_t mpd_directory_get_last_modified(const "
+.BI "struct mpd_directory *" directory );
+.PP
+.BI "struct mpd_directory *mpd_directory_begin(const struct mpd_pair *" pair );
+.PP
+.BI "bool mpd_directory_feed(struct mpd_directory *" directory ,
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "struct mpd_directory *mpd_recv_directory(struct"
+.BI "mpd_directory *" directory ", const struct mpd_pair *" pair );
+.SH DESCRIPTION
+The
+.BR mpd_directory_dup ()
+function duplicates a
+.I mpd_directory
+object.
+.PP
+The
+.BR mpd_directory_free ()
+function frees memory allocated by the
+.I mpd_directory
+object.
+.PP
+The
+.BR mpd_directory_get_path ()
+function returns the path of the
+.I mpd_directory
+object, relative to the MPD music directory. It does not begin with a slash.
+.PP
+The
+.BR mpd_directory_get_last_modified ()
+function returns the POSIX UTC time stamp of the last modification.
+.PP
+The
+.BR mpd_directory_begin ()
+function begins parsing a new directory. It receives the first
+.I mpd_pair
+object in this directory (name must be "directory").
+.PP
+The
+.BR mpd_directory_feed ()
+parses the pair, adding its information to the specified
+.I mpd_directory
+object.
+.PP
+The
+.BR mpd_recv_directory ()
+function receives the next directory from the MPD server.
+.SH RETURN VALUE
+.BR mpd_directory_dup ()
+returns the newly allocated object, or NULL on out of memory.
+.PP
+.BR mpd_directory_get_path ()
+returns the
+.BR "const char *"
+representation for the path of
+.I mpd_directory
+object.
+.PP
+.BR mpd_directory_get_last_modified ()
+returns the POSIX UTC time stamp of the last modification, or 0 if that is
+unknwon.
+.PP
+.BR mpd_directory_begin ()
+returns the new
+.I mpd_entity
+object, or NULL on error (out of memory, or pair name is not "directory").
+.PP
+.BR mpd_directory_feed ()
+returns true if the pair was parsed and added to the directory (or if the pair
+was not understood and ignored), false if this pair is the beginning of the
+next directory.
+.PP
+.BR mpd_recv_directory ()
+returns a
+.IR mpd_directory
+object, or NULL on error or if the directory list is finished.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_directory_get_last_modified ()
+function was added since libmpdclient 2.9.
+.SH SEE ALSO
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
