@@ -5,7 +5,7 @@ parameters
 .SH SYNOPSIS
 .B #include <mpd/client.h>
 .PP
-.BI "void mpd_connection_set_keepalive(struct mpd_connecton *" connection ,
+.BI "bool mpd_connection_set_keepalive(struct mpd_connecton *" connection ,
 .BI "bool " keepalive );
 .PP
 .BI "void mpd_connection_set_timeout(struct mpd_connection *" connection ,
@@ -35,6 +35,12 @@ Otherwise, the initial value is the one passed to
 If you have used
 .BR mpd_connection_new_async (),
 then the default value is 30 seconds.
+.SH RETURN VALUE
+The
+.BR mpd_connection_set_keepalive ()
+returns true on success, of false if 
+.BR setsockopt ()
+failed.
 .SH ERRORS
 No errors are defined.
 .SH HISTORY
