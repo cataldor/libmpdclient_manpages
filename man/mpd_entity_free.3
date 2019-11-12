@@ -1,0 +1,180 @@
+.TH MPD_ENTITY_FREE 3 2019
+.SH NAME
+mpd_entity_free, mpd_entity_get_type, mpd_entity_get_directory,
+mpd_entity_get_song, mpd_entity_get_playlist, mpd_entity_begin,
+mpd_entity_feed, mpd_recv_entity \- manipulate mpd_entity object
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "void mpd_entity_free(struct mpd_entity *" entity );
+.PP
+.BI "enum mpd_entity_type mpd_entity_get_type(const "
+.BI "struct mpd_entity *" entity );
+.PP
+.BI "const struct mpd_directory *mpd_entity_get_directory(const"
+.BI "struct mpd_entity *" entity );
+.PP
+.BI "const struct mpd_song *mpd_entity_get_song(const"
+.BI "struct mpd_entity *" entity );
+.PP
+.BI "const struct mpd_playlist *mpd_entity_get_playlist(const"
+.BI "struct mpd_entity *" entity );
+.PP
+.BI "struct mpd_entity *mpd_entity_begin(const struct mpd_pair *" pair );
+.PP
+.BI "bool mpd_entity_feed(struct mpd_entity *" entity ,
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "struct mpd_entity *mpd_recv_entity(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_entity_free ()
+function releases the 
+.IR entity .
+The function also frees the wrapped object.
+.PP
+The
+.BR mpd_entity_get_type ()
+function returns the type of the
+.I entity
+object as a
+.I mpd_entity_type
+enum.
+.PP
+The
+.BR mpd_entity_get_directory ()
+function provides a pointer to the
+.I mpd_directory
+object enclosed by this
+.I entity
+object. Calling this function is only allowed if
+.BR mpd_entity_get_type ()
+has returned
+.IR MPD_ENTITY_TYPE_DIRECTORY .
+.PP
+The
+.BR mpd_entity_get_song ()
+function provides a pointer to the
+.I mpd_song
+object enclosed by this
+.I entity
+object. Calling this function is only allowed if
+.BR mpd_entity_get_type ()
+has returned
+.IR MPD_ENTITY_TYPE_SONG .
+.PP
+The
+.BR mpd_entity_get_playlist ()
+function provides a pointer to the
+.I mpd_playlist
+object enclosed by this
+.I entity
+object. Calling this function is only allowed if
+.BR mpd_entity_get_type ()
+has returned
+.IR MPD_ENTITY_TYPE_PLAYLIST .
+.PP
+The
+.BR mpd_entity_begin ()
+function begins parsing a new
+.I mpd_entity
+object. This function receives the first
+.I pair
+object in this entity.
+.PP
+The
+.BR mpd_entity_feed ()
+parses the received
+.I pair
+object, adding its information to the specified
+.I entity
+object.
+.PP
+The
+.BR mpd_recv_entity ()
+function returns the next
+.I mpd_entity
+object from the MPD server.
+.SS The mpd_entity object
+A
+.IR mpd_entity
+object is returned by commands like "lsinfo". It is an object warpping all
+possible entity types.
+.SS The mpd_entity_type enum
+The
+.I mpd_entity_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+enum mpd_entity_type {
+	/**
+	 * The type of the entity received from MPD is not implemented
+	 * in this version of libmpdclient.
+	 */
+	MPD_ENTITY_TYPE_UNKNOWN,
+
+	/**
+	 * A directory (#mpd_directory) containing more entities.
+	 */
+	MPD_ENTITY_TYPE_DIRECTORY,
+
+	/**
+	 * A song file (#mpd_song) which can be added to the playlist.
+	 */
+	MPD_ENTITY_TYPE_SONG,
+
+	/**
+	 * A stored playlist (#mpd_playlist).
+	 */
+	MPD_ENTITY_TYPE_PLAYLIST,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_entity_get_type ()
+returns the type of the
+.I entity
+object.
+.PP
+.BR mpd_entity_get_directory ()
+.BR mpd_entity_get_song ()
+.BR mpd_entity_get_playlist ()
+return the
+.IR mpd_directory ,
+.IR mpd_song ,
+and
+.IR mpd_playlist
+wrapped by the
+.I entity
+object, respectively.
+.PP
+.BR mpd_entity_begin ()
+returns the new
+.I mpd_entity
+object, or NULL on error (out of memory).
+.PP
+.BR mpd_entity_feed ()
+returns true if the 
+.I pair 
+was parsed and added to the 
+.I entity
+(or if the 
+.I pair
+was not understood and ignored), or false if this 
+.I pair
+is the beginning of the next entity.
+.PP
+.BR mpd_recv_entity ()
+returns an
+.I mpd_entity
+object, or NULL on error or if the entity list is finished.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
