@@ -1,0 +1,97 @@
+.TH MPD_PARSE_FINGERPRINT_TYPE 3 2019
+.SH NAME
+mpd_parse_fingerprint_type, mpd_send_getfingerprint,
+mpd_run_getfingerprint_chromaprint \- fetch fingerprint information from the
+MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "enum mpd_fingerprint_type mpd_parse_fingerprint_type(const"
+.BI "char *" name );
+.PP
+.BI "bool mpd_send_getfingerprint(struct connection *" connection ,
+.BI "const char *" uri );
+.PP
+.BI "const char *mpd_run_getfingerprint_chromaprint(struct"
+.BI "connection *" connection ", const char *" uri ", char *" buffer ,
+.BI "size_t " buffer_size );
+.SH DESCRIPTION
+The
+.BR mpd_parse_fingerprint_type ()
+function parses a mpd_pair
+.I name
+to check which fingerprint type it contains.
+.PP
+The
+.BR mpd_send_getfingerprint ()
+function sends the "getfingerprint" command to MPD. You should call
+.BR mpd_recv_pair (3)
+to read response lines. Use
+.BR mpd_parse_fingerprint_type ()
+to check each pair's name: the pair's value then contains the actual
+fingerprint. The function receives a valid and connected
+.I connection
+and the song name
+.IR uri .
+.PP
+The
+.BR mpd_run_getfingerprint_chromaprint ()
+is a shortcut for
+.BR mpd_send_getfingerprint () ,
+.BR mpd_recv_pair_named (3) , 
+and
+.BR mpd_response_finish (3) .
+The function receives a valid and connected
+.I connection
+object, the song
+.IR uri ,
+a
+.I buffer
+for the fingerprint string and
+the size of the buffer
+.IR buffer_size .
+.SS The mpd_fingerprint_type enum
+The
+.IR mpd_fingerprint_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+enum mpd_fingerprint_type {
+	MPD_FINGERPRINT_TYPE_UNKNOWN,
+	MPD_FINGERPRINT_TYPE_CHROMAPRINT,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_parse_fingerprint_type ()
+returns the type of the
+.I mpd_pair
+name.
+.PP
+.BR mpd_send_getfingerprint ()
+returns true on success or false on error.
+.PP
+.BR mpd_run_getfingerprint_chromaprint ()
+returns a pointer to the
+.I buffer
+on success or NULL on error (or if there was no chromaprint in MPD's response).
+Additionally, if the
+.I buffer
+is too small, behavior is
+.IR undefined ;
+the library may truncate the string or fail.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+These functions appeared in libmpdclient 2.17 and MPD 0.22.
+.SH SEE ALSO
+.BR mpd_recv_pair (3),
+.BR mpd_recv_pair_named (3),
+.BR mpd_response_finish (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
