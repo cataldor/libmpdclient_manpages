@@ -1,0 +1,221 @@
+.TH MPD_IDLE_NAME 3 2019
+.SH NAME
+mpd_idle_name, mpd_idle_name_parse, mpd_send_idle, mpd_send_idle_mask,
+mpd_send_noidle, mpd_idle_parse_pair, mpd_recv_idle, mpd_run_idle,
+mpd_run_idle_mask, mpd_run_noidle \- wait until a noteworthy change in one or
+more MPD subsystems
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "const char *mpd_idle_name(enum mpd_idle " idle );
+.PP
+.BI "enum mpd_idle mpd_idle_name_parse(conat char *" name  );
+.PP
+.BI "bool mpd_send_idle(struct mpd_connection *" connection );
+.PP
+.BI "enum mpd_idle mpd_run_idle(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_idle_mask(struct"
+.BI "mpd_connection *" connection ", enum mpd_idle " mask );
+.PP
+.BI "enum mpd_idle mpd_run_idle_mask(struct"
+.BI "mpd_connection *" connection ", enum mpd_idle " mask );
+.PP
+.BI "bool mpd_send_noidle(struct mpd_connection *" connection );
+.PP
+.BI "enum mpd_idle mpd_run_noidle(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_idle_parse_pair(const struct mpd_pair *" pair );
+.PP
+.BI "enum mpd_idle mpd_recv_idle(struct"
+.BI "mpd_connection *" connection ", bool " disable_timeout );
+.PP
+.SH DESCRIPTION
+The
+.BR mpd_idle_name ()
+function parses a mpd_idle
+.I idle
+to return the name of the specified idle event.
+.PP
+The
+.BR mpd_idle_name_parse ()
+function parses a const char
+.RI * name
+to return the bitmask of the specified idle event.
+.PP
+The
+.BR mpd_send_idle ()
+function makes MPD enter \(lqidle\(rq mode: MPD will stall the response until an
+event has occurred. Call
+.BR mpd_send_noidle ()
+to abort the idle mode, or
+.BR mpd_recv_idle()
+to read the event mask (or synchronously wait for events). This function
+requires the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_idle ()
+is a shortcut for
+.BR mpd_send_idle ()
+and
+.BR mpd_recv_idle ().
+During the
+.BR mpd_recv_idle ()
+call, the configured timeout is disabled. This function requires the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_send_idle_mask ()
+function is the same as
+.BR mpd_send_idle (),
+but listen only on specified
+.I mask
+events. This function requires the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_idle_mask ()
+function is a shortcut for
+.BR mpd_send_idle_mask ()
+and
+.BR mpd_recv_idle ().
+During
+.BR mpd_recv_idle (),
+the configured timeout is disabled. This function requires the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_send_noidle ()
+tells MPD to leave the \(lqidle\(rq mode. MPD will then respond with a list of
+events which have occurred (which may be empty). Call
+.BR mpd_recv_idle ()
+after that. This function requires the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_noidle ()
+is a shortcut for
+.BR mpd_send_noidle ()
+and
+.BR mpd_recv_idle ().
+During
+.BR mpd_recv_idle (),
+the configured timeout is not disabled. This function requires the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_idle_parse_pair ()
+function parses a \(lqchanged\(rq
+.IR pair ,
+which is part of MPD's response to the \(lqidle\(rq command.
+.PP
+The
+.BR mpd_recv_idle ()
+function waits until MPD sends the list of idle events and returns it in a
+bit mask. This function requires two arguments: the
+.I connection
+to the MPD server and
+.IR disabled_timeout .
+If
+.I disabled_timeout
+is true, then libmpdclient temporarily disables the configured timeout
+(see
+.BR mpd_connection_set_timeout (3));
+thus, this function will block (i) forever, (ii) until MPD sends a response,
+(iii) an error occurs.
+.SS The mpd_idle enum
+The
+.IR mpd_idle
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * This enum contains bit masks for all idle events.
+ *
+ * @since libmpdclient 2.5 added support for #MPD_IDLE_STICKER,
+ * #MPD_IDLE_SUBSCRIPTION and #MPD_IDLE_MESSAGE.
+ */
+enum mpd_idle {
+	/** song database has been updated*/
+	MPD_IDLE_DATABASE = 0x1,
+
+	/** a stored playlist has been modified, created, deleted or
+	    renamed */
+	MPD_IDLE_STORED_PLAYLIST = 0x2,
+
+	/** the queue has been modified */
+	MPD_IDLE_QUEUE = 0x4,
+
+	/** deprecated, don't use */
+	MPD_IDLE_PLAYLIST = MPD_IDLE_QUEUE,
+
+	/** the player state has changed: play, stop, pause, seek, ... */
+	MPD_IDLE_PLAYER = 0x8,
+
+	/** the volume has been modified */
+	MPD_IDLE_MIXER = 0x10,
+
+	/** an audio output device has been enabled or disabled */
+	MPD_IDLE_OUTPUT = 0x20,
+
+	/** options have changed: crossfade, random, repeat, ... */
+	MPD_IDLE_OPTIONS = 0x40,
+
+	/** a database update has started or finished. */
+	MPD_IDLE_UPDATE = 0x80,
+
+	/** a sticker has been modified. */
+	MPD_IDLE_STICKER = 0x100,
+
+	/** a client has subscribed to or unsubscribed from a channel */
+	MPD_IDLE_SUBSCRIPTION = 0x200,
+
+	/** a message on a subscribed channel was received */
+	MPD_IDLE_MESSAGE = 0x400,
+
+	/** a partition was added or changed */
+	MPD_IDLE_PARTITION = 0x800,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_idle_name ()
+returns the name of the specified event, or NULL if that event is not known.
+.PP
+.BR mpd_idle_name_parse ()
+parses the name and return the id of the specified event, or 0 if that event
+is not known.
+.PP
+.BR mpd_send_idle (),
+.BR mpd_send_idle_mask (),
+.BR mpd_send_noidle ()
+return true on success, false on error.
+.PP
+.BR mpd_idle_parse_pair (),
+.BR mpd_recv_idle (),
+.BR mpd_run_noidle ()
+return the event bitmask, or 0 on error or if there were no events.
+.PP
+.BR mpd_run_idle (),
+.BR mpd_run_idle_mask ()
+return the event bitmask, or 0 on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+Support for MPD_IDLE_STICKER was added in libmpdclient 2.5.
+.SH SEE ALSO
+.BR mpd_connection_set_timeout (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
