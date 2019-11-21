@@ -1,0 +1,47 @@
+.TH MPD_COMMAND_LIST_BEGIN 3 2019
+.SH NAME
+mpd_command_list_begin, mpd_command_list_end \- starts/commits a command list
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_command_list_begin(struct mpd_connection *" connection ,
+.BI "bool " discrete_ok );
+.PP
+.BI "bool mpd_command_list_end(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_command_list_begin ()
+function starts a command list, i.e., a group of pipelined commands which are
+transferred in one block. If one command fails, the rest of the command list
+is
+.IR cancelled .
+Note that there is 
+.I no 
+guarantee on atomicity. This function receives the
+.I connection
+to the MPD server, and the
+.I discrete_ok
+parameter to tell MPD whether to acknowledge every list command with an
+\(lqlist_OK\(rq response.
+.PP
+The
+.BR mpd_command_list_end ()
+function commits the command list, i.e., makes MPD execute all commands which
+were queued. There is no way to cancel a command list once it is started; you
+may however close the socket
+.IR connection .
+This function receives the
+.I connection
+to the MPD server.
+.SH RETURN VALUE
+.BR mpd_command_list_begin (),
+.BR mpd_command_list_end ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
