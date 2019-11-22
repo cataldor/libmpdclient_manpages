@@ -1,0 +1,74 @@
+.TH MPD_SEND_SET_VOLUME 3 2019
+.SH NAME
+mpd_send_set_volume, mpd_run_set_volume, mpd_send_change_volume,
+mpd_run_change_volume \- manipulate volume for all outputs
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_set_volume(struct mpd_connection *" connection ,
+.BI "unsigned " volume );
+.PP
+.BI "bool mpd_run_set_volume(struct mpd_connection *" connection ,
+.BI "unsigned " volume );
+.PP
+.BI "bool mpd_send_change_volume(struct mpd_connection *" connection ,
+.BI "int " relative_volume );
+.PP
+.BI "bool mpd_run_unsubscribe(struct mpd_connection *" connection ,
+.BI "int " relative_volume );
+.SH DESCRIPTION
+The
+.BR mpd_send_set_volume ()
+function sets the
+.I volume
+of all output devices. The function receives the
+.I connection
+to the MPD server and the
+.I volume
+value ranging from 0 to 100.
+.PP
+The
+.BR mpd_run_set_volume ()
+function is a shortcut for
+.BR mpd_send_set_volume ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_change_volume ()
+function changes the 
+.I relative_volume
+of all output devices. The function receives the
+.I connection
+to the MPD server and the
+.I relative_volume
+ranging from -100 to 100.
+.PP
+The
+.BR mpd_run_change_volume ()
+function is a shortcut for
+.BR mpd_send_change_volume ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+.BR mpd_send_set_volume (),
+.BR mpd_run_set_volume (),
+.BR mpd_send_change_volume (),
+.BR mpd_run_change_volume ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_set_volume (),
+.BR mpd_run_set_volume (),
+.BR mpd_send_change_volume (),
+.BR mpd_run_change_volume ()
+functions were added to libmpdclient 2.9.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
