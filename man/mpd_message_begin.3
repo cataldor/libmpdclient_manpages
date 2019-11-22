@@ -1,0 +1,115 @@
+.TH MPD_MESSAGE_BEGIN 3 2019
+.SH NAME
+mpd_message_begin, mpd_message_free, mpd_send_subscribe,
+mpd_run_subscribe, mpd_send_unsubscribe, mpd_run_unsubscribe,
+mpd_send_channels \- manage message channels
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_message *mpd_message_begin(const struct mpd_pair *" pair );
+.PP
+.BI "void mpd_message_free(struct mpd_message *" message );
+.PP
+.BI "bool mpd_send_subscribe(struct mpd_connection *" connection ,
+.BI "const char *" channel );
+.PP
+.BI "bool mpd_run_subscribe(struct mpd_connection *" connection ,
+.BI "const char *" channel );
+.PP
+.BI "bool mpd_send_unsubscribe(struct mpd_connection *" connection ,
+.BI "const char *" channel );
+.PP
+.BI "bool mpd_run_unsubscribe(struct mpd_connection *" connection ,
+.BI "const char *" channel );
+.PP
+.BI "bool mpd_send_channels(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_message_begin ()
+function begins parsing a new message. The function receives the first
+.I pair
+in this message (name must be 
+.IR channel ).
+.PP
+The
+.BR mpd_message_free ()
+function frees a
+.I message
+object.
+.PP
+The
+.BR mpd_send_subscribe ()
+function sends the \(lqsubscribe\(rq command: subscribe to a message channel.
+This function receives the
+.I connection
+to the MPD server and the
+.I channel
+name.
+.PP
+The
+.BR mpd_run_subscribe ()
+function is a shortcut for
+.BR mpd_send_subscribe ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_unsubscribe ()
+function sends the \(lqunsubscribe\(rq command: unsubscribe to a message
+channel. This function receives the
+.I connection
+to the MPD server and the
+.I channel
+name.
+.PP
+The
+.BR mpd_run_unsubscribe ()
+function is a shortcut for
+.BR mpd_send_unsubscribe ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_channels ()
+function sends the \(lqchannels\(rq command: get a list of all channels. This
+function receives the
+.I connection
+to the MPD server.
+.SH RETURN VALUE
+.BR mpd_message_begin ()
+returns the new
+.I mpd_entity
+object, or NULL on error (out of memory or pair name is not \(lqchannel\(rq.
+.PP
+.BR mpd_send_subscribe (),
+.BR mpd_run_subscribe (),
+.BR mpd_send_unsubscribe (),
+.BR mpd_run_unsubscribe (),
+.BR mpd_send_channels ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_message_begin (),
+.BR mpd_message_free (),
+.BR mpd_send_subscribe (),
+.BR mpd_run_subscribe (),
+.BR mpd_send_unsubscribe (),
+.BR mpd_run_unsubscribe (),
+.BR mpd_send_channels ()
+functions were added to libmpdclient 2.5.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_message_feed (3),
+.BR mpd_message_get_channel (3),
+.BR mpd_message_get_text (3),
+.BR mpd_send_send_message (3),
+.BR mpd_run_send_message (3),
+.BR mpd_recv_message (3),
+.BR mpd_recv_channel_pair (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

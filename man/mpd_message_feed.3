@@ -1,0 +1,129 @@
+.TH MPD_MESSAGE_FEED 3 2019
+.SH NAME
+mpd_message_feed, mpd_message_get_channel, mpd_message_get_text,
+mpd_send_send_message, mpd_run_send_message, mpd_recv_message,
+mpd_recv_channel_pair \- manage a message
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_message_feed(struct mpd_message *" output ,
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "const char *mpd_message_get_channel(const struct mpd_message *" message );
+.PP
+.BI "const char *mpd_message_get_text(const struct mpd_message *" message );
+.PP
+.BI "bool mpd_send_send_message(struct mpd_connection *" connection ,
+.BI "const char *" channel ", const char *" text );
+.PP
+.BI "bool mpd_run_send_message(struct mpd_connection *" connection ,
+.BI "const char *" channel ", const char *" text );
+.PP
+.BI "struct mpd_message *mpd_recv_message(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_pair *mpd_recv_channel_pair(struct" 
+.BI "mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_message_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I output
+object. The function receives the mpd_message
+.I output
+and
+mpd_pair
+.IR pair .
+.PP
+The
+.BR mpd_message_get_channel ()
+and
+.BR mpd_message_get_text ()
+functions return the channel and text information from the
+.IR message .
+.PP
+The
+.BR mpd_send_send_message ()
+function sends the \(lqsendmessage\(rq command: send a text to a channel. The
+function receives the
+.I connection
+to the MPD server,
+the
+.IR channel ,
+and the
+.IR text .
+.PP
+The
+.BR mpd_run_send_message ()
+function is a shortcut for
+.BR mpd_send_send_message ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_recv_message ()
+function reads the next 
+.I mpd_message
+from the MPD response. You should free
+the returned value using
+.BR mpd_message_free (3).
+The function receives the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_channel_pair ()
+receives the next channel name as a 
+.IR mpd_pair .
+The function receives the
+.I connection
+to the MPD server.
+.SH RETURN VALUE
+.BR mpd_message_feed (),
+.BR mpd_send_send_message (),
+.BR mpd_run_send_message ()
+return true on success, false on error.
+.PP
+.BR mpd_message_get_channel ()
+and
+.BR mpd_message_get_text ()
+return the channel and text information from the
+.IR message ,
+respectively.
+.PP
+.BR mpd_recv_message ()
+returns the next
+.I mpd_message 
+object from the MPD response, NULL on error or end-of-response.
+.PP
+.BR mpd_recv_channel_pair ()
+returns a \(lqchannel\(rq 
+.IR mpd_pair ,
+or NULL on error or if the end of the response
+is reached.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_message_feed (),
+.BR mpd_message_get_channel (),
+.BR mpd_message_get_text (),
+.BR mpd_send_send_message (),
+.BR mpd_run_send_message (),
+.BR mpd_recv_message (),
+.BR mpd_recv_channel_pair ()
+functions were added to libmpdclient 2.5.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_message_begin (3),
+.BR mpd_send_subscribe (3),
+.BR mpd_run_subscribe (3),
+.BR mpd_send_unsubscribe (3),
+.BR mpd_run_unsubscribe (3),
+.BR mpd_send_channels (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
