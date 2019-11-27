@@ -1,0 +1,164 @@
+.TH MPD_SEND_OUTPUTS 3 2019
+.SH NAME
+mpd_send_outputs, mpd_recv_output, mpd_send_enable_output, 
+mpd_run_enable_output, mpd_send_disable_output, mpd_run_disable_output,
+mpd_send_toggle_output, mpd_run_toggle_output, mpd_send_output_set,
+mpd_run_output_set \- manipulate outputs with the MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool *mpd_send_outputs(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_output *mpd_recv_output(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_enable_output(struct mpd_connection *" connection "," 
+.BI "unsigned " output_id );
+.PP
+.BI "bool mpd_run_enable_output(struct mpd_connection *" connection ","
+.BI "unsgined " output_id );
+.PP
+.BI "bool mpd_send_disable_output(struct mpd_connection *" connection ","
+.BI "unsigned " output_id );
+.PP
+.BI "bool mpd_run_disable_output(struct mpd_connection *" connection ","
+.BI "unsigned " output_id );
+.PP
+.BI "bool mpd_send_toggle_output(struct mpd_connection *" connection ","
+.BI "unsigned " output_id );
+.PP
+.BI "bool mpd_run_toggle_output(struct mpd_connection *" connection ","
+.BI "unsigned " output_id );
+.PP
+.BI "bool mpd_send_output_set(struct mpd_connection *" connection ","
+.BI "unsigned " output_id ", const char *" attribute_name ","
+.BI "const char *" attribute_value );
+.PP
+.BI "bool mpd_run_output_set(struct mpd_connection *" connection ","
+.BI "unsigned " output_id ", const char *" attribute_name ","
+.BI "const char *" attribute_value );
+.SH DESCRIPTION
+The
+.BR mpd_send_outputs ()
+function sends the \(lqoutputs\(rq command to MPD: query information about all
+outputs. Call
+.BR mpd_recv_output ()
+to read the response. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_output ()
+reads the next
+.I mpd_output
+from the MPD response. Free the return value with
+.BR mpd_output_free (3).
+.PP
+The
+.BR mpd_send_enable_output ()
+function sends the \(lqenableoutput\(rq command to MPD: turns an output on. The
+function receives a
+.I connection
+to the MPD server and an output identifier
+.IR output_id .
+.PP
+The
+.BR mpd_run_enable_output ()
+function is a shortcut for
+.BR mpd_send_enable_output ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_disable_output ()
+function sends the \(lqdisableoutput\(rq command to MPD: turns an output off.
+The function receives a
+.I connection
+to the MPD server and an output identifier
+.IR output_id .
+.PP
+The
+.BR mpd_run_disable_output ()
+function is a shortcut for
+.BR mpd_send_disable_output ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_toggle_output ()
+function sends the \(lqtoggleoutput\(rq command to MPD: toggle the output
+state. The function receives a
+.I connection
+to the MPD server and an output identifier
+.IR output_id .
+.PP
+The
+.BR mpd_run_toggle_output ()
+function is a shortcut for
+.BR mpd_send_toggle_output ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_output_set ()
+function sends the \(lqoutputset\(rq command to MPD: set a runtime attribute
+for an output. The function receives a
+.I connection
+to the MPD server, an output identifier
+.IR output_id ,
+and the attribute name
+.I attribute_name
+and value
+.IR attribute_value .
+.PP
+The
+.BR mpd_run_output_set ()
+function is a shortcut for
+.BR mpd_send_output_set ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+.BR mpd_send_outputs (),
+.BR mpd_send_enable_output (),
+.BR mpd_run_enable_output (),
+.BR mpd_send_disable_output (),
+.BR mpd_run_disable_output (),
+.BR mpd_send_toggle_output (),
+.BR mpd_run_toggle_output (),
+.BR mpd_send_output_set (),
+.BR mpd_run_output_set ()
+return true on success, false on error.
+.PP
+.BR mpd_recv_output ()
+return a
+.I mpd_output
+object on success, NULL on error or end-of-response.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_toggle_output ()
+and
+.BR mpd_run_toggle_output (),
+functions were added to libmpdclient 2.9.
+.PP
+The
+.BR mpd_send_output_set ()
+and
+.BR mpd_run_output_set ()
+function were added to libmpdclient 2.14 and to MPD 0.21.
+.SH SEE ALSO
+.BR mpd_output_begin (3),
+.BR mpd_output_feed (3),
+.BR mpd_output_free (3),
+.BR mpd_output_get_id (3),
+.BR mpd_output_get_name (3),
+.BR mpd_output_get_plugin (3),
+.BR mpd_output_get_enabled (3),
+.BR mpd_output_get_attribute (3),
+.BR mpd_output_first_attribute (3),
+.BR mpd_output_next_attribute (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

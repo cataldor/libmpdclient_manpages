@@ -1,0 +1,124 @@
+.TH MPD_OUTPUT_GET_ID 3 2019
+.SH NAME
+mpd_output_get_id, mpd_output_get_name, mpd_output_get_plugin, 
+mpd_output_get_enabled, mpd_output_get_attribute, mpd_output_first_attribute, 
+mpd_output_next_attribute \- manage the mpd_output structure
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "unsigned *mpd_output_get_id(const struct mpd_output *" output );
+.PP
+.BI "const char *mpd_output_get_name(const struct mpd_output *" output );
+.PP
+.BI "const char *mpd_output_get_plugin(const struct mpd_output *" output );
+.PP
+.BI "bool mpd_output_get_enabled(const struct mpd_output *" output );
+.PP
+.BI "const char *mpd_output_get_attribute(const"
+.BI "struct mpd_output *" output ", const char *" name );
+.PP
+.BI "const struct mpd_pair *mpd_output_first_attribute(const"
+.BI "struct mpd_output *" output );
+.PP
+.BI "const struct mpd_pair *mpd_output_next_attribute(const"
+.BI "struct mpd_output *" output );
+.SH DESCRIPTION
+The
+.BR mpd_output_get_id ()
+function returns the id of the specified
+.IR mpd_output .
+.PP
+The
+.BR mpd_output_get_name ()
+function returns the configured name of the specified
+.IR mpd_output .
+.PP
+The
+.BR mpd_output_get_plugin ()
+function returns the plugin of the specified
+.IR mpd_output .
+.PP
+The
+.BR mpd_output_get_enabled ()
+function returns the state of the specified
+.IR mpd_output .
+.PP
+The
+.BR mpd_output_get_attribute ()
+function finds an attribute with the given
+.I name
+for the specified
+.I output
+and return its value.
+.PP
+The
+.BR mpd_output_first_attribute ()
+function obtains the first attribute for this
+.IR output .
+This rewinds the current attribute pointer to the start. Call
+.BR mpd_output_next_attribute ()
+to obtain more attributes.
+.PP
+The
+.BR mpd_output_next_attribute ()
+function obtains the next attribute for this
+.IR output .
+Call this function repeatdly until it returns NULL to get a full list
+of attributes.
+.SH RETURN VALUE
+.BR mpd_output_get_id ()
+returns an unsigned int containg the id of the specified
+.IR output .
+.PP
+.BR mpd_output_get_name (),
+.BR mpd_output_get_plugin (),
+.BR mpd_output_first_attribute (),
+.BR mpd_output_next_attribute ()
+return the configured name, plugin, first attribute, and next attribute of the
+specified
+.IR output ,
+respectively.
+.PP
+For 
+.BR mpd_output_get_plugin (),
+it returns NULL if none was specified by the server.
+.PP
+For
+.BR mpd_output_get_attribute ()
+and
+.BR mpd_output_first_attribute(),
+they return NULL if there are no attributes.
+.PP
+For
+.BR mpd_output_next_attribute (),
+it returns NULL if there are no more attributes.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_output_get_plugin (),
+.BR mpd_output_first_attribute (),
+.BR mpd_output_next_attribute ()
+functions were added to libmpdclient 2.14 and to MPD 0.21.
+.PP
+.BR mpd_output_get_attribute ()
+function was added to libmpdclient 2.16 and to MPD 0.21.
+.SH SEE ALSO
+.BR mpd_output_begin (3),
+.BR mpd_output_feed (3),
+.BR mpd_output_free (3),
+.BR mpd_send_outputs (3),
+.BR mpd_run_outputs (3),
+.BR mpd_send_enable_output (3),
+.BR mpd_run_enable_output (3),
+.BR mpd_send_disable_output (3),
+.BR mpd_run_disable_output (3),
+.BR mpd_send_toggle_output (3),
+.BR mpd_run_toggle_output (3),
+.BR mpd_send_output_set (3),
+.BR mpd_run_output_set (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

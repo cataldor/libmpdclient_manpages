@@ -1,0 +1,73 @@
+.TH MPD_OUTPUT_BEGIN 3 2019
+.SH NAME
+mpd_output_begin, mpd_output_free, mpd_output_feed \- parse output devices
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_output *mpd_output_begin(const struct mpd_pair *" pair );
+.PP
+.BI "void mpd_output_free(struct mpd_output *" output );
+.PP
+.BI "bool mpd_output_feed(struct mpd_output *" output ","
+.BI "const struct mpd_pair *" pair );
+.SH DESCRIPTION
+The
+.BR mpd_output_begin ()
+function parses the
+.I pair
+object to generate a new
+.IR mpd_output .
+.PP
+The
+.BR mpd_mount_free ()
+function frees the
+.IR output .
+.PP
+The
+.BR mpd_output_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I output
+object.
+.SH RETURN VALUE
+.BR mpd_output_begin ()
+returns a new
+.I mpd_output
+object, or NULL on error (out of memory or pair name is not \(lqoutputid\(rq).
+.PP
+.BR mpd_output_feed ()
+returns true if the
+.I pair
+was parsed and added to the
+.I output
+(or if the
+.I pair
+was not understood and ignored), false if this
+.I pair
+is the beginning of the next output.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_output_get_id (3),
+.BR mpd_output_get_name (3),
+.BR mpd_output_get_plugin (3),
+.BR mpd_output_get_enabled (3),
+.BR mpd_output_get_attribute (3),
+.BR mpd_output_first_attribute (3),
+.BR mpd_output_next_attribute (3),
+.BR mpd_send_outputs (3),
+.BR mpd_run_outputs (3),
+.BR mpd_send_enable_output (3),
+.BR mpd_run_enable_output (3),
+.BR mpd_send_disable_output (3),
+.BR mpd_run_disable_output (3),
+.BR mpd_send_toggle_output (3),
+.BR mpd_run_toggle_output (3),
+.BR mpd_send_output_set (3),
+.BR mpd_run_output_set (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
