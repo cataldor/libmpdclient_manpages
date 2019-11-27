@@ -1,0 +1,69 @@
+.TH MPD_MOUNT_FEED 3 2019
+.SH NAME
+mpd_mount_feed, mpd_mount_get_uri, mpd_mount_get_storage \- manage the
+mpd_mount structure
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_mount_feed(struct mpd_mount *" mnt ", const"
+.BI "struct mpd_pair *" pair );
+.PP
+.BI "const char *mpd_mount_get_uri(const struct mpd_mount *" mnt );
+.PP
+.BI "const char *mpd_mount_get_storage(const struct mpd_mount *" mnt );
+.SH DESCRIPTION
+The
+.BR mpd_mount_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.IR mnt .
+.PP
+The
+.BR mpd_mount_get_uri ()
+function returns the mount point URI of the specified
+.IR mnt .
+.PP
+The
+.BR mpd_mount_get_storage ()
+function returns the mounted storage URI of the specified
+.IR mnt .
+.SH RETURN VALUE
+.BR mpd_mount_feed ()
+returns true if the
+.I pair
+was parsed and added to the
+.I mnt
+(or if the
+.I pair
+was not understood and ignored), false if the
+.I pair
+is the beginning of the next mount.
+.PP
+.BR mpd_mount_get_uri (),
+.BR mpd_mount_get_uri ()
+return the mount point URI and mounted storage URI as 
+.IR "const char *" ,
+respectively.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_mount_feed (),
+.BR mpd_mount_get_uri (),
+.BR mpd_mount_get_storage ()
+functions were added to libmpdclient 2.16.
+.SH SEE ALSO
+.BR mpd_mount_begin (3),
+.BR mpd_mount_free (3),
+.BR mpd_send_list_mounts (3),
+.BR mpd_recv_mount (3),
+.BR mpd_send_mount (3),
+.BR mpd_run_mount (3),
+.BR mpd_send_unmount (3),
+.BR mpd_run_unmount (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

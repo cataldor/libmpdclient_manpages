@@ -1,0 +1,131 @@
+.TH MPD_MOUNT_BEGIN 3 2019
+.SH NAME
+mpd_mount_begin, mpd_mount_free, mpd_send_list_mounts, mpd_recv_mount,
+mpd_send_mount, mpd_run_mount, mpd_send_unmount, mpd_run_unmount \- manage
+mount points
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_mount *mpd_mount_begin(const struct mpd_pair *" pair );
+.PP
+.BI "void mpd_mount_free(struct mpd_mount *" mnt );
+.PP
+.BI "bool mpd_send_list_mounts(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_mount *mpd_recv_mount(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_mount(struct mpd_connection *" connection ,
+.BI "const char *" uri ", const char *" storage );
+.PP
+.BI "bool mpd_run_mount(struct mpd_connection *" connection ,
+.BI "const char *" uri ", const char *" storage );
+.PP
+.BI "bool mpd_send_unmount(struct mpd_connection *" connection , 
+.BI "const char *" uri );
+.PP
+.BI "bool mpd_run_unmount(struct mpd_connection *" connection , 
+.BI "const char *" uri );
+.SH DESCRIPTION
+The
+.BR mpd_mount_begin ()
+function parses the
+.I pair
+to generate a new
+.IR mpd_mount .
+.PP
+The
+.BR mpd_mount_free ()
+function frees the
+.IR mnt .
+.PP
+The
+.BR mpd_send_list_mounts ()
+function sends the \(lqlistmounts\(rq command to MPD: list all mount points.
+Call
+.BR mpd_recv_mount ()
+to read the response. The function receives the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_mount ()
+function reads the next
+.I mpd_mount
+from the MPD response. You should free the returned value with
+.BR mpd_mount_free ().
+The function receives the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_send_mount ()
+sends the \(lqmount\(rq command: create the
+.I uri
+mount point from the mounted
+.IR storage .
+The function also receives the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_mount ()
+function is a shortcut for
+.BR mpd_send_mount ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_unmount ()
+function sends the \(lqunmount\(rq command: unmounts the
+.I uri
+mount point. The function also receives the
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_unmount ()
+function is a shortcut for
+.BR mpd_send_unmount ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+.BR mpd_mount_begin ()
+returns a new
+.I mpd_mount
+object, or NULL on error (out of memory or pair name is not \(lqmount\(rq).
+.PP
+.BR mpd_recv_mount ()
+returns a new
+.I mpd_mount
+object on success, NULL on error or end-of-response.
+.PP
+.BR mpd_send_list_mounts (),
+.BR mpd_send_mount (),
+.BR mpd_run_mount (),
+.BR mpd_send_unmount (),
+.BR mpd_run_unmount ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_mount_begin (),
+.BR mpd_mount_free ()
+functions were added to libmpdclient 2.16.
+.PP
+.BR mpd_send_list_mounts (),
+.BR mpd_send_mount (),
+.BR mpd_run_mount (),
+.BR mpd_send_unmount (),
+.BR mpd_run_unmount (),
+functions were added to libmpdclient 2.16 and to MPD 0.19.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_mount_feed (3),
+.BR mpd_mount_get_uri (3),
+.BR mpd_mount_get_storage (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
