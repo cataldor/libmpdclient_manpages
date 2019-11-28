@@ -1,0 +1,122 @@
+.TH MPD_PARSER_NEW 3 2019
+.SH NAME
+mpd_parser_new, mpd_parser_free, mpd_parser_feed, mpd_parser_is_discrete \- 
+parse MPD response lines
+.SH SYNOPSIS
+.B #include <mpd/parser.h>
+.PP
+.BI "struct mpd_parser *mpd_parser_new(void);
+.PP
+.BI "void mpd_parser_free(struct mpd_parser *" parser );
+.PP
+.BI "enum mpd_parser_result mpd_parser_feed(struct mpd_parser *" parser ","
+.BI "char *" line );
+.PP
+.BI "bool mpd_parser_is_discrete(const struct mpd_parser *" parser );
+.SH DESCRIPTION
+The mpd_parser object is a low-level parser for the MPD protocol. You feed it
+with input lines, and it provides parsed representations.
+.PP
+The
+.BR mpd_parser_new ()
+function allocates a new
+.I mpd_parser 
+object.
+.PP
+The
+.BR mpd_parser_free ()
+function frees the
+.IR parser .
+.PP
+The
+.BR mpd_parser_feed ()
+function parses the
+.I line
+(without the trailing newline character) received from
+.BR mpd_async_recv_line (3)
+into the
+object.
+Note that the
+.I line
+is writable, because the parser will modify it. The functions
+.BR mpd_parser_get_name (3)
+and
+.BR mpd_parser_get_value (3)
+will return pointers inside this buffer. This means that after passing the
+.I line
+to this function, you
+.IR "must not modify it or free it" ,
+until the name and value pointers are not used anymore.
+.PP
+The
+.BR mpd_parser_is_discrete ()
+function should be used when
+.BR mpd_parser_feed ()
+has returned
+.I MPD_PARSER_SUCCESS
+to find out whether this is an \(lqOK\(rq (false) or \(lqlist_OK\(rq (true)
+response. The function receives the
+.I parser
+object.
+.SS The mpd_parser_result enum
+The
+.IR mpd_parser_result
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+enum mpd_parser_result {
+	/**
+	 * Response line was not understood.
+	 */
+	MPD_PARSER_MALFORMED,
+
+	/**
+	 * MPD has returned "OK" or "list_OK" (check with
+	 * mpd_parser_is_discrete()).
+	 */
+	MPD_PARSER_SUCCESS,
+
+	/**
+	 * MPD has returned "ACK" with an error code.  Call
+	 * mpd_parser_get_server_error() to get the error code.
+	 */
+	MPD_PARSER_ERROR,
+
+	/**
+	 * MPD has returned a name-value pair.  Call
+	 * mpd_parser_get_name() and mpd_parser_get_value().
+	 */
+	MPD_PARSER_PAIR,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_parser_new ()
+returns a new
+.I mpd_parser
+object, or NULL on error (out of memory).
+.PP
+.BR mpd_parser_feed ()
+returns the result code as a
+.I mpd_parser_result
+indicating the type of line, or error.
+.PP
+.BR mpd_parser_is_discrete ()
+returns false if the response line was \(lqOK\(rq, or true if the response was
+\(lqlist_OK\(rq.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_async_recv_line (3),
+.BR mpd_parser_get_server_error (3),
+.BR mpd_parser_get_at (3),
+.BR mpd_parser_get_message (3),
+.BR mpd_parser_get_name (3),
+.BR mpd_parser_get_value (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

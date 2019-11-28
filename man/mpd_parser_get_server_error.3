@@ -1,0 +1,139 @@
+.TH MPD_PARSER_GET_SERVER_ERROR 3 2019
+.SH NAME
+mpd_parser_get_server_error, mpd_parser_get_at, mpd_parser_get_message,
+mpd_parser_get_name, mpd_parser_get_value \- manipulate a mpd_parser object
+.SH SYNOPSIS
+.B #include <mpd/parser.h>
+.PP
+.BI "enum mpd_server_error *mpd_parser_get_server_error(const"
+.BI "struct mpd_parser *" parser );
+.PP
+.BI "unsigned mpd_parser_get_at(const struct mpd_parser *" parser );
+.PP
+.BI "const char *mpd_parser_get_message(const struct mpd_parser *" parser );
+.PP
+.BI "const char *mpd_parser_get_name(const struct mpd_parser *" parser );
+.PP
+.BI "const char *mpd_parser_get_value(const struct mpd_parser *" parser );
+.SH DESCRIPTION
+The mpd_parser object is a low-level parser for the MPD protocol. You feed it
+with input lines, and it provides parsed representations.
+.PP
+The
+.BR mpd_parser_get_server_error ()
+function should be called when
+.BR mpd_parser_feed (3)
+has returned
+.I MPD_PARSER_ERROR
+to obtain the reason for the error. The function receives the
+.I parser
+object.
+.PP
+The
+.BR mpd_parser_get_server_at ()
+function should be called when
+.BR mpd_parser_feed (3)
+has returned
+.I MPD_PARSER_ERROR
+to obtain the number of the list command which failed. Don't call this outside
+of a command list. The function receives the
+.I parser
+object.
+.PP
+The
+.BR mpd_parser_get_message ()
+function should be called when
+.BR mpd_parser_feed (3)
+has returned
+.I MPD_PARSER_ERROR
+to obtain the human-readable error message returned by MPD (UTF-8). This returns
+a pointer into the line buffer passed to
+.BR mpd_parser_feed (3).
+Is is valid as long as the buffer is not freed/modified. The function receives
+the
+.I parser
+object.
+.PP
+The
+.BR mpd_parser_get_name ()
+function should be called when
+.BR mpd_parser_feed (3)
+has returned
+.I MPD_PARSER_PAIR
+to obtain the name returned by MPD. This returns a pointer into the line buffer
+passed to
+.BR mpd_parser_feed (3).
+Is is valid as long as the buffer is not freed/modified. The function receives
+the
+.I parser
+object.
+.PP
+The
+.BR mpd_parser_get_value ()
+function should be called when
+.BR mpd_parser_feed (3)
+has returned
+.I MPD_PARSER_PAIR
+to obtain the name returned by MPD. This returns a pointer into the line buffer
+passed to
+.BR mpd_parser_feed (3).
+Is is valid as long as the buffer is not freed/modified. The function receives
+the
+.I parser
+object.
+.SS The mpd_server_error enum
+The
+.IR mpd_server_error
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+enum mpd_server_error {
+	MPD_SERVER_ERROR_UNK = -1,
+
+	MPD_SERVER_ERROR_NOT_LIST = 1,
+	MPD_SERVER_ERROR_ARG = 2,
+	MPD_SERVER_ERROR_PASSWORD = 3,
+	MPD_SERVER_ERROR_PERMISSION = 4,
+	MPD_SERVER_ERROR_UNKNOWN_CMD = 5,
+
+	MPD_SERVER_ERROR_NO_EXIST = 50,
+	MPD_SERVER_ERROR_PLAYLIST_MAX = 51,
+	MPD_SERVER_ERROR_SYSTEM = 52,
+	MPD_SERVER_ERROR_PLAYLIST_LOAD = 53,
+	MPD_SERVER_ERROR_UPDATE_ALREADY = 54,
+	MPD_SERVER_ERROR_PLAYER_SYNC = 55,
+	MPD_SERVER_ERROR_EXIST = 56,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+.BR mpd_parser_get_server_error ()
+returns a new
+.I mpd_server_error
+object as the reason for the error.
+.PP
+.BR mpd_parser_get_at ()
+returns the number of the list command as a
+.IR unsigned .
+.PP
+.BR mpd_parser_get_message (),
+.BR mpd_parser_get_name (),
+.BR mpd_parser_get_value ()
+return a poiner into the line buffer to
+.BR mpd_parser_feed (3)
+for the human-readable error message, the name, and the value received from
+MPD, respectively. It is valid as long as the buffer is not freed/modified.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_parser_new (3),
+.BR mpd_parser_free (3),
+.BR mpd_parser_feed (3),
+.BR mpd_parser_is_discrete (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
