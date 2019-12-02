@@ -1,0 +1,157 @@
+.TH MPD_SEND_CURRENT_SONG 3 2019
+.SH NAME
+mpd_send_current_song, mpd_run_current_song, mpd_send_play, mpd_run_play,
+mpd_send_clearerror, mpd_run_clearerror \- manipulate current song
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_current_song(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_song *mpd_run_current_song(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_play(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_play(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_seek_current(struct mpd_connection *" connection ","
+.BI "float " t ", bool " relative );
+.PP
+.BI "bool mpd_run_seek_current(struct mpd_connection *" connection ","
+.BI "float " t ", bool " relative );
+.PP
+.BI "bool mpd_send_clearerror(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_clearerror(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_send_current_song ()
+function fetches the currently selected song (the song referenced by
+.BR mpd_status_get_song_id (3)).
+Call
+.BR mpd_recv_song (3)
+to receive the response. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_current_song ()
+function is a shortcut for
+.BR mpd_send_current_song ()
+and
+.BR mpd_recv_song (3).
+.PP
+The
+.BR mpd_send_play ()
+function starts playing the current song from the beginning. The function
+receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_play ()
+function is a shortcut for
+.BR mpd_send_play ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_seek_current ()
+function seeks the current song. The function receives a
+.I connection
+to the MPD server, the position
+.I t
+within the song, in seconds, and the
+.I relative
+parameter: if true, makes
+.I t
+a relative to the current position.
+.PP
+The
+.BR mpd_run_seek_current ()
+function is a shortcut for
+.BR mpd_send_seek_current ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_clearerror ()
+function clears the current error message in MPD's status (this is also
+accomplished by any command that starts playback). The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_clearerror ()
+function is a shortcut for
+.BR mpd_send_clearerror ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+.BR mpd_send_current_song (),
+.BR mpd_send_play (),
+.BR mpd_run_play (),
+.BR mpd_send_seek_current (),
+.BR mpd_run_seek_current (),
+.BR mpd_send_clearerror (),
+.BR mpd_run_clearerror ()
+return true on success, false on error.
+.PP
+.BR mpd_run_current_song ()
+returns the current song, or NULL on error or if there is no current song.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_clearerror ()
+and
+.BR mpd_run_clearerror ()
+functions were added since libmpdclient 2.4.
+.PP
+The
+.BR mpd_send_seek_current ()
+and
+.BR mpd_run_seek_current ()
+functions were added since libmpdclient 2.15 (and MPD 0.17).
+.SH SEE ALSO
+.BR mpd_status_get_song_id (3),
+.BR mpd_recv_song (3),
+.BR mpd_response_finish (3),
+.BR mpd_send_play_pos (3),
+.BR mpd_run_play_pos (3),
+.BR mpd_send_play_id (3),
+.BR mpd_run_play_id (3),
+.BR mpd_send_stop (3),
+.BR mpd_run_stop (3),
+.BR mpd_send_toggle_pause (3),
+.BR mpd_run_toggle_pause (3),
+.BR mpd_send_pause (3),
+.BR mpd_run_pause (3),
+.BR mpd_send_next (3),
+.BR mpd_run_next (3),
+.BR mpd_send_previous (3),
+.BR mpd_run_previous (3),
+.BR mpd_send_seek_pos (3),
+.BR mpd_run_seek_pos (3),
+.BR mpd_send_seek_id (3),
+.BR mpd_run_seek_id (3),
+.BR mpd_send_seek_id_float (3),
+.BR mpd_run_seek_id_float (3),
+.BR mpd_send_repeat (3),
+.BR mpd_run_repeat (3),
+.BR mpd_send_random (3),
+.BR mpd_run_random (3),
+.BR mpd_send_single (3),
+.BR mpd_run_single (3),
+.BR mpd_send_consume (3),
+.BR mpd_run_consume (3),
+.BR mpd_send_crossfade (3),
+.BR mpd_run_crossfade (3),
+.BR mpd_send_mixramdb (3),
+.BR mpd_run_mixramdb (3),
+.BR mpd_send_mixrampbdelay (3),
+.BR mpd_run_mixrampdelay (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

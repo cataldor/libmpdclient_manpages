@@ -1,0 +1,120 @@
+.TH MPD_SEND_STOP 3 2019
+.SH NAME
+mpd_send_stop, mpd_run_stop, mpd_send_pause, mpd_run_pause, 
+mpd_send_toggle_pause, mpd_run_toggle_pause \- stop playing the current song
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_stop(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_stop(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_pause(struct mpd_connection *" connection ","
+.BI "bool " mode );
+.PP
+.BI "bool mpd_run_pause(struct mpd_connection *" connection ","
+.BI "bool " mode );
+.PP
+.BI "bool mpd_send_toggle_pause(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_toggle_pause(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_send_stop ()
+function stops playing the current song. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_stop ()
+function is a shortcut for
+.BR mpd_send_stop ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_pause ()
+function pauses/resumes playing the current song. The function receives a
+.I connection
+to the MPD server and a
+.I mode
+with one of the following values:
+.TP
+.B true
+The song should be stopped.
+.TP
+.B false
+The song should be resumed.
+.PP
+The
+.BR mpd_run_pause ()
+function is a shortcut for
+.BR mpd_send_pause ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_toggle_pause ()
+toggles the pause mode by sending \(lqpause\(rq without arguments.
+.IR "This function uses a deprecated feature of MPD, you should avoid it" .
+.PP
+The
+.BR mpd_run_toggle_pause ()
+function is a shortcut for
+.BR mpd_send_toggle_pause ()
+and
+.BR mpd_response_finish (3).
+.IR "This function uses a deprecated feature of MPD, you should avoid it" .
+.SH RETURN VALUE
+.BR mpd_send_stop (),
+.BR mpd_run_stop (),
+.BR mpd_send_pause (),
+.BR mpd_run_pause (),
+.BR mpd_send_toggle_pause (),
+.BR mpd_run_toggle_pause ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_current_song (3),
+.BR mpd_run_current_song (3),
+.BR mpd_send_play (3),
+.BR mpd_run_play (3),
+.BR mpd_send_seek_current (3),
+.BR mpd_run_seek_current (3),
+.BR mpd_send_clearerror (3),
+.BR mpd_run_clearerror (3),
+.BR mpd_send_seek_pos (3),
+.BR mpd_run_seek_pos (3),
+.BR mpd_send_seek_id (3),
+.BR mpd_run_seek_id (3),
+.BR mpd_send_seek_id_float (3),
+.BR mpd_run_seek_id_float (3),
+.BR mpd_send_play_pos (3),
+.BR mpd_run_play_pos (3),
+.BR mpd_send_play_id (3),
+.BR mpd_run_play_id (3),
+.BR mpd_send_next (3),
+.BR mpd_run_next (3),
+.BR mpd_send_previous (3),
+.BR mpd_run_previous (3),
+.BR mpd_send_repeat (3),
+.BR mpd_run_repeat (3),
+.BR mpd_send_random (3),
+.BR mpd_run_random (3),
+.BR mpd_send_single (3),
+.BR mpd_run_single (3),
+.BR mpd_send_consume (3),
+.BR mpd_run_consume (3),
+.BR mpd_send_crossfade (3),
+.BR mpd_run_crossfade (3),
+.BR mpd_send_mixramdb (3),
+.BR mpd_run_mixramdb (3),
+.BR mpd_send_mixrampdelay (3),
+.BR mpd_run_mixrampdelay (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

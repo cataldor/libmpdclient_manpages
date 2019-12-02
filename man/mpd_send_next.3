@@ -1,0 +1,148 @@
+.TH MPD_SEND_NEXT 3 2019
+.SH NAME
+mpd_send_next, mpd_run_next, mpd_send_previous, mpd_run_previous, 
+mpd_send_repeat, mpd_run_repeat, mpd_send_random, mpd_run_random \- manipulate
+MPD's playlist
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_next(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_next(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_previous(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_previous(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_repeat(struct mpd_connection *" connection ","
+.BI "bool " mode );
+.PP
+.BI "bool mpd_run_repeat(struct mpd_connection *" connection ","
+.BI "bool " mode );
+.PP
+.BI "bool mpd_send_random(struct mpd_connection *" connection ","
+.BI "bool " mode );
+.PP
+.BI "bool mpd_run_random(struct mpd_connection *" connection ","
+.BI "bool " mode );
+.SH DESCRIPTION
+The
+.BR mpd_send_next ()
+function plays the next song in the playlist. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_next ()
+function is a shortcut for
+.BR mpd_send_next ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_previous ()
+function plays the previous song in the playlist. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_previous ()
+function is a shortcut for
+.BR mpd_send_previous ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_repeat ()
+function sets repeat mode on/off for the current song. The function receives a
+.I connection
+to the MPD server and a
+.I mode
+with one of the following values:
+.TP
+.B true
+MPD enables repeat mode.
+.TP
+.B false
+MPD disables repeat mode.
+.PP
+The
+.BR mpd_run_repeat ()
+function is a shortcut for
+.BR mpd_send_repeat ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_random ()
+function sets random mode on/off for the queue. The function receives a
+.I connection
+to the MPD server and a
+.I mode
+with one of the following values:
+.TP
+.B true
+MPD enables random mode.
+.TP
+.B false
+MPD disables random mode.
+.PP
+The
+.BR mpd_run_random ()
+function is a shortcut for
+.BR mpd_send_random ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+.BR mpd_send_next (),
+.BR mpd_run_next (),
+.BR mpd_send_previous (),
+.BR mpd_run_previous (),
+.BR mpd_send_repeat (),
+.BR mpd_run_repeat (),
+.BR mpd_send_random (),
+.BR mpd_run_random ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_current_song (3),
+.BR mpd_run_current_song (3),
+.BR mpd_send_play (3),
+.BR mpd_run_play (3),
+.BR mpd_send_seek_current (3),
+.BR mpd_run_seek_current (3),
+.BR mpd_send_clearerror (3),
+.BR mpd_run_clearerror (3),
+.BR mpd_send_seek_pos (3),
+.BR mpd_run_seek_pos (3),
+.BR mpd_send_seek_id (3),
+.BR mpd_run_seek_id (3),
+.BR mpd_send_seek_id_float (3),
+.BR mpd_run_seek_id_float (3),
+.BR mpd_send_play_pos (3),
+.BR mpd_run_play_pos (3),
+.BR mpd_send_play_id (3),
+.BR mpd_run_play_id (3),
+.BR mpd_send_stop (3),
+.BR mpd_run_stop (3),
+.BR mpd_send_pause (3),
+.BR mpd_run_pause (3),
+.BR mpd_send_toggle_pause (3),
+.BR mpd_run_toggle_pause (3),
+.BR mpd_send_single (3),
+.BR mpd_run_single (3),
+.BR mpd_send_consume (3),
+.BR mpd_run_consume (3),
+.BR mpd_send_crossfade (3),
+.BR mpd_run_crossfade (3),
+.BR mpd_send_mixramdb (3),
+.BR mpd_run_mixramdb (3),
+.BR mpd_send_mixrampdelay (3),
+.BR mpd_run_mixrampdelay (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

@@ -1,0 +1,131 @@
+.TH MPD_SEND_SEEK_POS 3 2019
+.SH NAME
+mpd_send_seek_pos, mpd_run_seek_pos, mpd_send_seek_id, mpd_run_seek_id,
+mpd_send_seek_id_float, mpd_run_seek_id_float \- seek song on MPD
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_seek_pos(struct mpd_connection *" connection ","
+.BI "unsigned " song_pos ", unsigned " t );
+.PP
+.BI "bool mpd_run_seek_pos(struct mpd_connection *" connection ","
+.BI "unsigned " song_pos ", unsigned " t );
+.PP
+.BI "bool mpd_send_seek_id(struct mpd_connection *" connection ","
+.BI "unsigned " song_id ", unsigned " t );
+.PP
+.BI "bool mpd_run_seek_id(struct mpd_connection *" connection ","
+.BI "unsigned " song_id ", unsigned " t );
+.PP
+.BI "bool mpd_send_seek_id_float(struct mpd_connection *" connection ","
+.BI "unsigned " song_id ", float " t );
+.PP
+.BI "bool mpd_run_seek_id_float(struct mpd_connection *" connection ","
+.BI "unsigned " song_id ", float " t );
+.SH DESCRIPTION
+The
+.BR mpd_send_seek_pos ()
+seeks to the position
+.I t
+(in seconds)
+of position
+.I song_pos
+in the playlist. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_seek_pos ()
+function is a shortcut for
+.BR mpd_send_seek_pos ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_seek_id ()
+seeks to the position
+.I t
+(in seconds)
+of song id
+.IR song_id .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_seek_id ()
+function is a shortcut for
+.BR mpd_send_seek_id ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_seek_id_float ()
+seeks to the position
+.I t
+(in seconds; fractions allowed)
+of song id
+.IR song_id .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_seek_id ()
+function is a shortcut for
+.BR mpd_send_seek_id_float ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+.BR mpd_send_seek_pos (),
+.BR mpd_run_seek_pos (),
+.BR mpd_send_seek_id (),
+.BR mpd_run_seek_id (),
+.BR mpd_send_seek_id_float (),
+.BR mpd_run_seek_id_float ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_current_song (3),
+.BR mpd_run_current_song (3),
+.BR mpd_send_play (3),
+.BR mpd_run_play (3),
+.BR mpd_send_seek_current (3),
+.BR mpd_run_seek_current (3),
+.BR mpd_send_clearerror (3),
+.BR mpd_run_clearerror (3),
+.BR mpd_send_play_pos (3),
+.BR mpd_run_play_pos (3),
+.BR mpd_send_play_id (3),
+.BR mpd_run_play_id (3),
+.BR mpd_send_stop (3),
+.BR mpd_run_stop (3),
+.BR mpd_send_toggle_pause (3),
+.BR mpd_run_toggle_pause (3),
+.BR mpd_send_pause (3),
+.BR mpd_run_pause (3),
+.BR mpd_send_next (3),
+.BR mpd_run_next (3),
+.BR mpd_send_previous (3),
+.BR mpd_run_previous (3),
+.BR mpd_send_repeat (3),
+.BR mpd_run_repeat (3),
+.BR mpd_send_random (3),
+.BR mpd_run_random (3),
+.BR mpd_send_single (3),
+.BR mpd_run_single (3),
+.BR mpd_send_consume (3),
+.BR mpd_run_consume (3),
+.BR mpd_send_crossfade (3),
+.BR mpd_run_crossfade (3),
+.BR mpd_send_mixramdb (3),
+.BR mpd_run_mixramdb (3),
+.BR mpd_send_mixrampdelay (3),
+.BR mpd_run_mixrampdelay (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
