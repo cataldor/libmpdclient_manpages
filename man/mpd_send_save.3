@@ -1,0 +1,119 @@
+.TH MPD_SEND_SAVE 3 2019
+.SH NAME
+mpd_send_save, mpd_run_save, mpd_send_load, mpd_run_load, mpd_send_load_range,
+mpd_run_load_range \- manipulate stored playlist
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_save(struct mpd_connection *" connection ","
+.BI "const char *" name );
+.PP
+.BI "bool mpd_run_save(struct mpd_connection *" connection ","
+.BI "const char *" name );
+.PP
+.BI "bool mpd_send_load(struct mpd_connection *" connection ","
+.BI "const char *" name );
+.PP
+.BI "bool mpd_run_load(struct mpd_connection *" connection ","
+.BI "const char *" name );
+.PP
+.BI "bool mpd_send_load_range(struct mpd_connection *" connection ","
+.BI "const char *" name ", unsigned " start ", unsigned " end );
+.PP
+.BI "bool mpd_run_load_range(struct mpd_connection *" connection ","
+.BI "const char *" name ", unsigned " start ", unsigned " end );
+.SH DESCRIPTION
+The
+.BR mpd_send_save ()
+function saves the current queue as a
+.IR name .m3u
+file in the playlist directory. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_save ()
+function is a shortcut for
+.BR mpd_send_save ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_load ()
+function loads the stored playlist
+.IR name .m3u
+into the queue. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_load ()
+function is a shortcut for
+.BR mpd_send_load ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_load_range ()
+function is like
+.BR mpd_send_load (),
+but load only a portion of the stored 
+.I name
+playlist: from the
+.I start
+position (including) up to the
+.I end
+position (excluding); the special value
+.I UINT_MAX
+makes the
+.I end
+range open.
+.PP
+The
+.BR mpd_run_load_range ()
+function is a shortcut for
+.BR mpd_send_load_range ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_load (),
+.BR mpd_run_load ()
+functions were added to libmpdclient 2.0.
+.PP
+The
+.BR mpd_send_load_range (),
+.BR mpd_run_load_range (),
+functions were added to libmpdclient 2.16.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_playlist_free (3),
+.BR mpd_playlist_dup (3),
+.BR mpd_playlist_get_path (3),
+.BR mpd_playlist_get_last_modified (3),
+.BR mpd_playlist_begin (3),
+.BR mpd_playlist_feed (3),
+.BR mpd_send_list_playlists (3),
+.BR mpd_recv_playlist (3),
+.BR mpd_send_list_playlist (3),
+.BR mpd_send_list_playlist_meta (3),
+.BR mpd_send_playlist_clear (3),
+.BR mpd_run_playlist_clear (3),
+.BR mpd_send_playlist_add (3),
+.BR mpd_run_playlist_add (3),
+.BR mpd_send_playlist_move (3),
+.BR mpd_send_playlist_delete (3),
+.BR mpd_run_playlist_delete (3),
+.BR mpd_send_rename (3),
+.BR mpd_run_rename (3),
+.BR mpd_send_rm (3),
+.BR mpd_run_rm (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

@@ -1,0 +1,100 @@
+.TH MPD_SEND_LIST_PLAYLISTS 3 2019
+.SH NAME
+mpd_send_list_playlists, mpd_recv_playlist, mpd_send_list_playlist, 
+mpd_send_list_playlist_meta \- fetch stored playlists of MPD
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_list_playlists(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_playlist *mpd_recv_playlist(struct"
+.BI "mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_list_playlist(struct mpd_connection *" connection ","
+.BI "const char *" name );
+.PP
+.BI "bool mpd_send_list_playlist_meta(struct mpd_connection *" connection ","
+.BI "const char *" name );
+.SH DESCRIPTION
+The
+.BR mpd_send_list_playlists ()
+function obtains a list of stored playlists. Use
+.BR mpd_recv_playlist ()
+to read the playlists. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_playlist ()
+function receives the next playlist from the MPD server. The function receives
+a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_send_list_playlist ()
+function lists the content of the
+.I name
+stored playlist. Otherwise, use
+.BR mpd_send_list_queue_meta (3)
+for listing all songs in the queue. Use
+.BR mpd_recv_entity (3)
+to receive the songs
+.RI ( MPD_ENTITY_TYPE_SONG ).
+.PP
+The
+.BR mpd_send_list_playlist_meta ()
+function lists the content, with full metadata, of the
+.I name
+stored playlist. Otherwise, use
+.BR mpd_send_list_queue_meta (3)
+for listing all songs in the queue. Use
+.BR mpd_recv_entity (3)
+to receive the songs
+.RI ( MPD_ENTITY_TYPE_SONG ).
+.SH RETURN VALUE
+.BR mpd_send_list_playlists (),
+.BR mpd_send_list_playlist (),
+.BR mpd_send_list_playlist_meta ()
+return true on success, false on error.
+.PP
+.BR mpd_recv_playlist ()
+returns a
+.I mpd_playlist
+object, or NULL on error or if the playlist list is finished.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_list_playlists ()
+function was added to libmpdclient 2.5.
+.SH SEE ALSO
+.BR mpd_send_list_queue_meta (3),
+.BR mpd_playlist_free (3),
+.BR mpd_playlist_dup (3),
+.BR mpd_playlist_get_path (3),
+.BR mpd_playlist_get_last_modified (3),
+.BR mpd_playlist_begin (3),
+.BR mpd_playlist_feed (3),
+.BR mpd_send_playlist_clear (3),
+.BR mpd_run_playlist_clear (3),
+.BR mpd_send_playlist_add (3),
+.BR mpd_run_playlist_add (3),
+.BR mpd_send_playlist_move (3),
+.BR mpd_send_playlist_delete (3),
+.BR mpd_run_playlist_delete (3),
+.BR mpd_send_save (3),
+.BR mpd_run_save (3),
+.BR mpd_send_load (3),
+.BR mpd_run_load (3),
+.BR mpd_send_load_range (3),
+.BR mpd_run_load_range (3),
+.BR mpd_send_rename (3),
+.BR mpd_run_rename (3),
+.BR mpd_send_rm (3),
+.BR mpd_run_rm (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

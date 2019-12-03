@@ -1,0 +1,118 @@
+.TH MPD_PLAYLIST_BEGIN 3 2019
+.SH NAME
+mpd_playlist_begin, mpd_playlist_free, mpd_playlist_dup, 
+mpd_playlist_feed, mpd_playlist_get_path, mpd_playlist_get_last_modified \-
+manipulate mpd_playlist object
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_playlist *mpd_playlist_begin(const struct mpd_pair *" pair );
+.PP
+.BI "void mpd_playlist_free(struct mpd_playlist *" playlist );
+.PP
+.BI "struct mpd_playlist *mpd_playlist_dup(const"
+.BI "struct mpd_playlist *" playlist );
+.PP
+.BI "bool mpd_playlist_feed(struct mpd_playlist *" playlist ","
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "const char *mpd_playlist_get_path(const struct mpd_playlist *" playlist );
+.PP
+.BI "time_t mpd_playlist_get_last_modified(const"
+.BI "struct mpd_playlist *" playlist );
+.SH DESCRIPTION
+The
+.BR mpd_playlist_begin ()
+function begins parsing a new mpd_playlist object from the first
+.I pair
+in this playlist (name must be \(lqplaylist\(rq).
+.PP
+The
+.BR mpd_playlist_free ()
+function frees memory allocated by the
+.I playlist
+object.
+.PP
+The
+.BR mpd_playlist_dup ()
+function duplicates a
+.I playlist
+object.
+.PP
+The
+.BR mpd_playlist_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I playlist
+object.
+.PP
+The
+.BR mpd_playlist_get_path ()
+function returns the path name of this playlist file (it does not begin with a
+slash).
+.PP
+The
+.BR mpd_playlist_get_last_modified ()
+function returns the POSIX UTC time stamp of the last modification, or 0 if
+that is unknown.
+.SH RETURN VALUE
+.BR mpd_playlist_begin ()
+returns a new
+.I mpd_playlist
+object, or NULL on error (out of memory, or
+.I pair
+name is not \(lqplaylist\(rq).
+.PP
+.BR mpd_playlist_dup ()
+returns a new
+.I mpd_playlist
+obect, or NULL on out of memory.
+.PP
+.BR mpd_playlist_feed ()
+returns true if the
+.I pair
+was parsed and added to the
+.I playlist
+(or if the
+.I pair
+was not understood and ignored), false if this
+.I pair
+is the beginning of the next playlist.
+.PP
+.BR mpd_playlist_get_path ()
+returns the path name of this playlist file as a
+.IR "const char *" .
+.PP
+.BR mpd_playlist_get_last_modified ()
+returns the POSIX UTC time stamp (or 0 if that is unknown) as a
+.IR time_t .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_send_list_playlists (3),
+.BR mpd_recv_playlist (3),
+.BR mpd_send_list_playlist (3),
+.BR mpd_send_list_playlist_meta (3),
+.BR mpd_send_playlist_clear (3),
+.BR mpd_run_playlist_clear (3),
+.BR mpd_send_playlist_add (3),
+.BR mpd_run_playlist_add (3),
+.BR mpd_send_playlist_move (3),
+.BR mpd_send_playlist_delete (3),
+.BR mpd_run_playlist_delete (3),
+.BR mpd_send_save (3),
+.BR mpd_run_save (3),
+.BR mpd_send_load (3),
+.BR mpd_run_load (3),
+.BR mpd_send_load_range (3),
+.BR mpd_run_load_range (3),
+.BR mpd_send_rename (3),
+.BR mpd_run_rename (3),
+.BR mpd_send_rm (3),
+.BR mpd_run_rm (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
