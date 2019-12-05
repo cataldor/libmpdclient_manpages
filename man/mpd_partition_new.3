@@ -1,0 +1,60 @@
+.TH MPD_PARTITION_NEW 3 2019
+.SH NAME
+mpd_partition_new, mpd_partition_free, mpd_partition_get_name \- manipulate
+mpd_partition objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_partition *mpd_partition_begin(const struct mpd_pair *" pair );
+.PP
+.BI "void mpd_partition_free(struct mpd_partition *" partition );
+.PP
+.BI "const char *mpd_partition_get_name(const"
+.BI "struct mpd_partition *" partition );
+.SH DESCRIPTION
+The
+.BR mpd_partition_new ()
+function creates a new partition object from the
+.I pair
+received from the MPD server.
+.PP
+The
+.BR mpd_partition_free ()
+function frees the
+.I partition 
+object.
+.PP
+The
+.BR mpd_partition_get_name ()
+function returns the partition name from the
+.I partition
+object.
+.SH RETURN VALUE
+.BR mpd_partition_begin ()
+returns a new
+.I mpd_partition
+object, or NULL on error (out of memory or pair name is not \(lqpartition\(rq).
+.PP
+.BR mpd_partition_get_name ()
+returns the partition name as a
+.IR "const char *" .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_partition_begin (),
+.BR mpd_partition_free (),
+.BR mpd_partition_get_name ()
+functions were added to libmpdclient 2.17.
+.SH SEE ALSO
+.BR mpd_send_newpartition (3),
+.BR mpd_run_newpartition (3),
+.BR mpd_send_switch_partition (3),
+.BR mpd_run_switch_partition (3),
+.BR mpd_send_listpartitions (3),
+.BR mpd_recv_partition_pair (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

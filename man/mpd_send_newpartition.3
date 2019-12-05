@@ -1,0 +1,100 @@
+.TH MPD_SEND_NEWPARTITION 3 2019
+.SH NAME
+mpd_send_newpartition, mpd_run_newpartition, mpd_send_switch_partition, 
+mpd_run_switch_partition, mpd_send_listpartitions, mpd_recv_partition_pair \-
+manipulate MPD partitions
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_newpartition(struct mpd_connection *" connection ","
+.BI "const char *" partition );
+.PP
+.BI "bool mpd_run_newpartition(struct mpd_connection *" connection ","
+.BI "const char *" partition );
+.PP
+.BI "bool mpd_send_switch_partition(struct mpd_connection *" connection ","
+.BI "const char *" partition );
+.PP
+.BI "bool mpd_run_switch_partition(struct mpd_connection *" connection ","
+.BI "const char *" partition );
+.PP
+.BI "bool mpd_send_listpartitions(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_pair *mpd_recv_partition_pair(struct"
+.BI "mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_send_newpartition ()
+function creates a new partition named
+.I partition
+on the MPD server. A partition is one frontend of a multi-player MPD process:
+it has separate queue, player and outputs. A client is assigned to one
+partition at a time. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_newpartition ()
+function is a shortcut for
+.BR mpd_send_newpartition ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_switch_partition ()
+switches the client to a different
+.IR partition .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_switch_partition ()
+function is a shortcut for
+.BR mpd_send_switch_partition ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_listpartitions ()
+function sends the \(lqlistpartitions\(rq command: request the list of
+partitions. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_partition_pair ()
+receives the next partition name. Call this in a loop after
+.BR mpd_send_listpartitions ().
+Free the return value with
+.BR mpd_return_pair (3).
+The function receives a
+.I connection
+to the MPD server.
+.SH RETURN VALUE
+.BR mpd_send_newpartition (),
+.BR mpd_run_newpartition (),
+.BR mpd_send_switch_partition (),
+.BR mpd_run_switch_partition (),
+.BR mpd_send_listpartitions ()
+return true on success, false on error.
+.PP
+.BR mpd_recv_partition_pair ()
+returns a \(lqpartition\(rq
+.IR pair ,
+or NULL on error or if the end of the response is reached.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+All functions were added to libmpdclient 2.17.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_return_pair (3),
+.BR mpd_partition_new (3),
+.BR mpd_partition_free (3),
+.BR mpd_partition_get_name (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
