@@ -15,8 +15,9 @@ newline character at the end.
 .PP
 The line is returned as a
 .IR "char *"
-and is only valid until the next async function is called.
-
+and is only valid until the next async function is called. The user should use
+.BR mpd_parser_feed (3)
+for dealing with this line as a parsed representation.
 .SH RETURN VALUE
 The function returns a line on success or NULL on error.
 .SH ERRORS
@@ -24,6 +25,7 @@ If
 .BR mpd_async_recv_line ()
 returns NULL, the user should use one of the error functions of libmpdclient.
 .SH SEE ALSO
+.BR mpd_parser_feed (3),
 .BR mpd_async_get_error (3),
 .BR mpd_async_get_error_message (3),
 .BR mpd_async_get_system_error (3),
