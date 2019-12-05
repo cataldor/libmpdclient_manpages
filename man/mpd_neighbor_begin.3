@@ -1,0 +1,87 @@
+.TH MPD_NEIGHBOR_BEGIN 3 2019
+.SH NAME
+mpd_neighbor_begin, mpd_neighbor_feed, mpd_neighbor_free,
+mpd_neighbor_get_uri, mpd_neighbor_get_display_name \- manipulate
+mpd_neighbor objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_neighbor *mpd_neighbor_begin(const struct mpd_pair *" pair );
+.PP
+.BI "bool mpd_neighbor_feed(struct mpd_neighbor *" neighbor ","
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "void mpd_neighbor_free(struct mpd_neighbor *" neighbor );
+.PP
+.BI "const char *mpd_neighbor_get_uri(const struct mpd_neighbor *" neighbor );
+.PP
+.BI "const char *mpd_neighbor_get_display_name(const"
+.BI "struct mpd_neighbor *" neighbor );
+.SH DESCRIPTION
+The
+.BR mpd_neighbor_begin ()
+function creates a new neighbor object from the
+.I pair
+received from the MPD server. A neighbor is an accessible file server on the
+local net.
+.PP
+The
+.BR mpd_neighbor_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I neighbor
+object.
+.PP
+The
+.BR mpd_partition_free ()
+function frees a 
+.I neighbor
+object.
+.PP
+The
+.BR mpd_neighbor_get_uri ()
+function returns the
+.I neighbor
+mount point URI.
+.PP
+The
+.BR mpd_neighbor_get_display_name ()
+function returns the
+.I neighbor
+display name.
+.SH RETURN VALUE
+.BR mpd_neighbor_begin ()
+returns a new
+.I mpd_neighbor
+object, or NULL on error (out of memory or wrong pair name).
+.PP
+.BR mpd_neighbor_feed ()
+returns true if the
+.I pair
+was parsed and added to the
+.I neighbor
+(or if the
+.I pair
+was not understood and ignored), false if this
+.I pair
+is the beginning of the next neighbor.
+.PP
+.BR mpd_partition_get_uri (),
+.BR mpd_neighbor_get_display_name ()
+return the 
+.I neighbor
+mount URI and display name, respectively, as
+.IR "const char *" .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+All functions were added to libmpdclient 2.17.
+.SH SEE ALSO
+.BR mpd_send_list_neighbors (3),
+.BR mpd_recv_neighbor (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
