@@ -1,0 +1,185 @@
+.TH MPD_SEARCH_ADD_BASE_CONSTRAINT 3 2019
+.SH NAME
+mpd_search_add_base_constraint, mpd_search_add_uri_constraint,
+mpd_search_add_tag_constraint, mpd_search_add_any_tag_constraint,
+mpd_search_add_modified_since_constraint \- constraint a search operation on
+the MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_search_add_base_constraint(struct mpd_connection *" connection ","
+.BI "enum mpd_operator " oper ", const char *" value );
+.PP
+.BI "bool mpd_search_add_uri_constraint(struct mpd_connection *" connection ","
+.BI "enum mpd_operator " oper ", const char *" value );
+.PP
+.BI "bool mpd_search_add_tag_constraint(struct mpd_connection *" connection ","
+.BI "enum mpd_operator " oper ", enum mpd_tag_type " tag ","
+.BI "const char *" value );
+.PP
+.BI "bool mpd_search_add_any_tag_constraint(struct"
+.BI "mpd_connection *" connection ", enum mpd_operator " oper ","
+.BI "const char *" value );
+.PP
+.BI "bool mpd_search_add_modified_since_constraint(struct"
+.BI "mpd_connection *" connection ", enum mpd_operator " oper ", time_t " time );
+.SH DESCRIPTION
+The
+.BR mpd_search_add_base_constraint ()
+function limits the search to the
+.I value
+directory. The function also receives a
+.I connection
+to the MPD server and the search operator
+.IR oper .
+.PP
+The
+.BR mpd_search_add_uri_constraint ()
+function adds a constraint on the song
+.I uri
+value. The function also receives a
+.I connection
+to the MPD server and the search operator
+.IR oper .
+.PP
+The
+.BR mpd_search_add_tag_constraint ()
+function limits the search to the 
+.I value
+of the tag
+.IR type .
+The function also receives a
+.I connection
+to the MPD server and the search operator
+.IR oper .
+.PP
+The
+.BR mpd_search_add_any_tag_constraint ()
+function limits the search to the 
+.I value
+of any tag. The function also receives a
+.I connection
+to the MPD server and the search operator
+.IR oper .
+.PP
+The
+.BR mpd_search_add_modified_since_constraint ()
+function limits the search to files modified after the given
+.IR time .
+The function also receives a
+.I connection
+to the MPD server and the search operator
+.IR oper .
+.SS The mpd_operator enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * This type is not yet used, it is reserved for a future protocol
+ * extension which will allow us to specify a comparison operator for
+ * constraints.
+ */
+enum mpd_operator {
+	/**
+	 * The default search operator.  If "exact" was passed as
+	 * "true", then it means "full string comparison"; if false,
+	 * then it means "search for substring".
+	 */
+	MPD_OPERATOR_DEFAULT,
+};
+.EE
+.in
+.SS The mpd_tag_type enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT
+ * @since libmpdclient 2.17 added support for #MPD_TAG_LABEL and #MPD_TAG_MUSICBRAINZ_WORKID.
+ */
+enum mpd_tag_type
+{
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
+	MPD_TAG_ARTIST,
+	MPD_TAG_ALBUM,
+	MPD_TAG_ALBUM_ARTIST,
+	MPD_TAG_TITLE,
+	MPD_TAG_TRACK,
+	MPD_TAG_NAME,
+	MPD_TAG_GENRE,
+	MPD_TAG_DATE,
+	MPD_TAG_COMPOSER,
+	MPD_TAG_PERFORMER,
+	MPD_TAG_COMMENT,
+	MPD_TAG_DISC,
+
+	MPD_TAG_MUSICBRAINZ_ARTISTID,
+	MPD_TAG_MUSICBRAINZ_ALBUMID,
+	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
+	MPD_TAG_MUSICBRAINZ_TRACKID,
+	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+
+	MPD_TAG_ORIGINAL_DATE,
+
+	MPD_TAG_ARTIST_SORT,
+	MPD_TAG_ALBUM_ARTIST_SORT,
+
+	MPD_TAG_ALBUM_SORT,
+	MPD_TAG_LABEL,
+	MPD_TAG_MUSICBRAINZ_WORKID,
+
+	MPD_TAG_GROUPING,
+	MPD_TAG_WORK,
+	MPD_TAG_CONDUCTOR,
+
+	/* IMPORTANT: the ordering of tag types above must be
+	   retained, or else the libmpdclient ABI breaks */
+
+	MPD_TAG_COUNT
+};
+.EE
+.in
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_search_add_base_constraint ()
+function was added to libmpdclient 2.9.
+.PP
+The
+.BR mpd_search_add_modified_since_constraint ()
+function was added to libmpdclient 2.10.
+.SH SEE ALSO
+.BR mpd_search_db_songs (3),
+.BR mpd_search_add_db_songs (3),
+.BR mpd_search_add_db_songs_to_playlist (3),
+.BR mpd_search_queue_songs (3),
+.BR mpd_search_db_tags (3),
+.BR mpd_search_add_expression (3),
+.BR mpd_search_add_group_tag (3),
+.BR mpd_search_add_sort_name (3),
+.BR mpd_search_add_sort_tag (3),
+.BR mpd_search_add_window (3),
+.BR mpd_count_db_songs (3),
+.BR mpd_search_commit (3),
+.BR mpd_search_cancel (3),
+.BR mpd_recv_pair_tag (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

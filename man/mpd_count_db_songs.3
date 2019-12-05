@@ -1,0 +1,139 @@
+.TH MPD_COUNT_DB_SONGS 3 2019
+.SH NAME
+mpd_count_db_songs, mpd_search_commit, mpd_search_cancel,
+mpd_recv_pair_tag \- finalize the search operation on the MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_count_db_songs(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_search_commit(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_search_cancel(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_recv_pair_tag(struct mpd_connection *" connection ","
+.BI "enum mpd_tag_type " type );
+.SH DESCRIPTION
+The
+.BR mpd_count_db_songs ()
+function gathers statistics on a set of songs in the database. Constraint may
+be specified with, e.g.,
+.BR mpd_search_add_tag_constraint (3).
+Send the command with
+.BR mpd_search_commit (),
+and read the response with
+.BR mpd_recv_stats (3).
+The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_search_commit ()
+function starts the real search with constaints added with, e.g.,
+.BR mpd_search_add_tag_constraint (3).
+The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_search_cancel ()
+function cancels the search request before you have called
+.BR mpd_search_commit ().
+Call this to clear the current search request. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_pair_tag ()
+function works as
+.BR mpd_recv_pair_named (3),
+but the pair name is specified as the tag 
+.IR type .
+The function also receives a
+.I connection
+to the MPD server.
+.SS The mpd_tag_type enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT
+ * @since libmpdclient 2.17 added support for #MPD_TAG_LABEL and #MPD_TAG_MUSICBRAINZ_WORKID.
+ */
+enum mpd_tag_type
+{
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
+	MPD_TAG_ARTIST,
+	MPD_TAG_ALBUM,
+	MPD_TAG_ALBUM_ARTIST,
+	MPD_TAG_TITLE,
+	MPD_TAG_TRACK,
+	MPD_TAG_NAME,
+	MPD_TAG_GENRE,
+	MPD_TAG_DATE,
+	MPD_TAG_COMPOSER,
+	MPD_TAG_PERFORMER,
+	MPD_TAG_COMMENT,
+	MPD_TAG_DISC,
+
+	MPD_TAG_MUSICBRAINZ_ARTISTID,
+	MPD_TAG_MUSICBRAINZ_ALBUMID,
+	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
+	MPD_TAG_MUSICBRAINZ_TRACKID,
+	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+
+	MPD_TAG_ORIGINAL_DATE,
+
+	MPD_TAG_ARTIST_SORT,
+	MPD_TAG_ALBUM_ARTIST_SORT,
+
+	MPD_TAG_ALBUM_SORT,
+	MPD_TAG_LABEL,
+	MPD_TAG_MUSICBRAINZ_WORKID,
+
+	MPD_TAG_GROUPING,
+	MPD_TAG_WORK,
+	MPD_TAG_CONDUCTOR,
+
+	/* IMPORTANT: the ordering of tag types above must be
+	   retained, or else the libmpdclient ABI breaks */
+
+	MPD_TAG_COUNT
+};
+.EE
+.in
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_recv_pair_named (3),
+.BR mpd_search_db_songs (3),
+.BR mpd_search_add_db_songs (3),
+.BR mpd_search_add_db_songs_to_playlist (3),
+.BR mpd_search_queue_songs (3),
+.BR mpd_search_db_tags (3),
+.BR mpd_search_add_base_constraint (3),
+.BR mpd_search_add_uri_constraint (3),
+.BR mpd_search_add_tag_constraint (3),
+.BR mpd_search_add_any_tag_constraint (3),
+.BR mpd_search_add_modified_since_constraint (3),
+.BR mpd_search_add_expression (3),
+.BR mpd_search_add_group_tag (3),
+.BR mpd_search_add_sort_name (3),
+.BR mpd_search_add_sort_tag (3),
+.BR mpd_search_add_window (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
