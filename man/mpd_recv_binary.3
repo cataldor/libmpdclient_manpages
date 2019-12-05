@@ -1,0 +1,94 @@
+.TH MPD_RECV_BINARY 3 2019
+.SH NAME
+mpd_recv_binary, mpd_recv_pair, mpd_recv_pair_named, mpd_return_pair,
+mpd_enqueue_pair \- reads response/mpd_pair from the MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_recv_binary(struct mpd_connection *"connection ", void *" data ","
+.BI "size_t " length );
+.PP
+.BI "struct mpd_pair *mpd_recv_pair(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_pair *mpd_recv_pair_named(struct"
+.BI "mpd_connection *" connection ", const char *" name );
+.PP
+.BI "void mpd_return_pair(struct mpd_connection *" connection ","
+.BI "struct mpd_pair *" pair );
+.PP
+.BI "void mpd_enqueue_pair(struct mpd_connection *" connection ","
+.BI "struct mpd_pair *" pair );
+.SH DESCRIPTION
+The
+.BR mpd_recv_binary ()
+function reads at most
+.I length
+binary data response to the buffer
+.IR data .
+The size and binary pair must be already read from the input buffer. The
+function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_pair ()
+function reads the next mpd_pair from the server. The caller must dispose the
+pair with either
+.BR mpd_return_pair ()
+or
+.BR mpd_enqueue_pair ().
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_recv_pair_named ()
+function works like
+.BR mpd_recv_pair_named (),
+but discards all pairs not matching the specified
+.IR name .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_return_pair ()
+function indicates that the
+.I pair
+is not needed anymore, and can be freed. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_enqueue_pair ()
+function unreads the
+.IR pair .
+You may unread only the one
+.I pair
+you just got from
+.BR mpd_recv_pair ().
+Unreading the "NULL" pair is allowed, to allow you to call
+.BR mpd_recv_pair ()
+again at the end of a response.
+.SH RETURN VALUE
+.BR mpd_recv_binary ()
+returns true on success, false on error.
+.PP
+.BR mpd_recv_pair ()
+and
+.BR mpd_recv_pair_named ()
+return the next
+.I mpd_pair
+from the server or NULL if there are no more pairs.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_recv_binary ()
+function was added to libmpdclient 2.17.
+.SH SEE ALSO
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
