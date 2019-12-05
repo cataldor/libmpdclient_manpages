@@ -1,0 +1,203 @@
+.TH MPD_SEND_ADD_TAG_ID 3 2019
+.SH NAME
+mpd_send_add_tag_id, mpd_run_add_tag_id, mpd_send_clear_tag_id,
+mpd_run_clear_tag_id, mpd_send_clear_all_tag_id, mpd_run_clear_all_tag_id \-
+manipulate song tags
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_add_tag_id(struct mpd_connection *" connection ","
+.BI "unsigned " id ", enum mpd_tag_type " tag ", const char *" value );
+.PP
+.BI "bool mpd_run_add_tag_id(struct mpd_connection *" connection ","
+.BI "unsigned " id ", enum mpd_tag_type " tag ", const char *" value );
+.PP
+.BI "bool mpd_send_clear_tag_id(struct mpd_connection *" connection ","
+.BI "unsigned " id ", enum mpd_tag_type " tag );
+.PP
+.BI "bool mpd_run_clear_tag_id(struct mpd_connection *" connection ","
+.BI "unsigned " id ", enum mpd_tag_type " tag );
+.PP
+.BI "bool mpd_send_clear_all_tag_id(struct mpd_connection *" connection ","
+.BI "unsigned " id );
+.PP
+.BI "bool mpd_run_clear_all_tag_id(struct mpd_connection *" connection ","
+.BI "unsigned " id );
+.SH DESCRIPTION
+The
+.BR mpd_send_add_tag_id ()
+function adds the
+.I tag
+with the
+.I value
+for the song
+.IR id .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_add_tag_id ()
+function is a shortcut for
+.BR mpd_send_add_tag_id ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_clear_tag_id ()
+function clears the
+.I tag
+for the song
+.IR id .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_clear_tag_id ()
+function is a shortcut for
+.BR mpd_send_clear_tag_id ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_clear_all_tag_id ()
+function clears all tags for the song
+.IR id .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_clear_all_tag_id ()
+function is a shortcut for
+.BR mpd_send_clear_all_tag_id ()
+and
+.BR mpd_response_finish (3).
+.SS The mpd_tag_type enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT
+ * @since libmpdclient 2.17 added support for #MPD_TAG_LABEL and #MPD_TAG_MUSICBRAINZ_WORKID.
+ */
+enum mpd_tag_type
+{
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
+	MPD_TAG_ARTIST,
+	MPD_TAG_ALBUM,
+	MPD_TAG_ALBUM_ARTIST,
+	MPD_TAG_TITLE,
+	MPD_TAG_TRACK,
+	MPD_TAG_NAME,
+	MPD_TAG_GENRE,
+	MPD_TAG_DATE,
+	MPD_TAG_COMPOSER,
+	MPD_TAG_PERFORMER,
+	MPD_TAG_COMMENT,
+	MPD_TAG_DISC,
+
+	MPD_TAG_MUSICBRAINZ_ARTISTID,
+	MPD_TAG_MUSICBRAINZ_ALBUMID,
+	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
+	MPD_TAG_MUSICBRAINZ_TRACKID,
+	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+
+	MPD_TAG_ORIGINAL_DATE,
+
+	MPD_TAG_ARTIST_SORT,
+	MPD_TAG_ALBUM_ARTIST_SORT,
+
+	MPD_TAG_ALBUM_SORT,
+	MPD_TAG_LABEL,
+	MPD_TAG_MUSICBRAINZ_WORKID,
+
+	MPD_TAG_GROUPING,
+	MPD_TAG_WORK,
+	MPD_TAG_CONDUCTOR,
+
+	/* IMPORTANT: the ordering of tag types above must be
+	   retained, or else the libmpdclient ABI breaks */
+
+	MPD_TAG_COUNT
+};
+.EE
+.in
+.PP
+
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_send_add_tag_id (),
+.BR mpd_run_add_tag_id (),
+.BR mpd_send_clear_tag_id (),
+.BR mpd_run_clear_tag_id (),
+.BR mpd_send_clear_all_tag_id (),
+.BR mpd_run_clear_all_tag_id ()
+functions were added to libmpdclient 2.12 and to MPD 0.19.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_list_queue_meta (3),
+.BR mpd_send_list_queue_range_meta (3),
+.BR mpd_send_get_queue_song_pos (3),
+.BR mpd_run_get_queue_song_pos (3),
+.BR mpd_send_get_queue_song_id (3),
+.BR mpd_run_get_queue_song_id (3),
+.BR mpd_send_queue_changes_meta (3),
+.BR mpd_send_queue_changes_meta_range (3),
+.BR mpd_send_queue_changes_brief (3),
+.BR mpd_send_queue_changes_brief_range (3),
+.BR mpd_recv_queue_change_brief (3),
+.BR mpd_send_add (3),
+.BR mpd_run_add (3),
+.BR mpd_send_add_id (3),
+.BR mpd_run_add_id (3),
+.BR mpd_send_add_id_to (3),
+.BR mpd_run_add_id_to (3),
+.BR mpd_recv_song_id (3),
+.BR mpd_send_delete (3),
+.BR mpd_run_delete (3),
+.BR mpd_send_delete_range (3),
+.BR mpd_run_delete_range (3),
+.BR mpd_send_delete_id (3),
+.BR mpd_run_delete_id (3),
+.BR mpd_send_shuffle (3),
+.BR mpd_run_shuffle (3),
+.BR mpd_send_shuffle_range (3),
+.BR mpd_run_shuffle_range (3),
+.BR mpd_send_clear (3),
+.BR mpd_run_clear (3),
+.BR mpd_send_move (3),
+.BR mpd_run_move (3),
+.BR mpd_send_move_id (3),
+.BR mpd_run_move_id (3),
+.BR mpd_send_move_range (3),
+.BR mpd_run_move_range (3),
+.BR mpd_send_swap (3),
+.BR mpd_run_swap (3),
+.BR mpd_send_swap_id (3),
+.BR mpd_run_swap_id (3),
+.BR mpd_send_prio (3),
+.BR mpd_run_prio (3),
+.BR mpd_send_prio_range (3),
+.BR mpd_run_prio_range (3),
+.BR mpd_send_prio_id (3),
+.BR mpd_run_prio_id (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

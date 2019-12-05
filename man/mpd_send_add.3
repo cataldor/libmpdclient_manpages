@@ -1,0 +1,158 @@
+.TH MPD_SEND_ADD 3 2019
+.SH NAME
+mpd_send_add, mpd_run_add, mpd_send_add_id, mpd_run_add_id, mpd_send_add_id_to,
+mpd_run_add_id_to, mpd_recv_song_id \- add a song to the queue (current
+playlist)
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_add(struct mpd_connection *" connection ","
+.BI "const char *" file );
+.PP
+.BI "bool mpd_run_add(struct mpd_connection *" connection ","
+.BI "const char *" file );
+.PP
+.BI "bool mpd_send_add_id(struct mpd_connection *" connection ","
+.BI "const char *" file );
+.PP
+.BI "int mpd_run_add_id(struct mpd_connection *" connection ","
+.BI "const char *" file );
+.PP
+.BI "bool mpd_send_add_id_to(struct mpd_connection *" connection ","
+.BI "const char *" uri ", unsigned " to );
+.PP
+.BI "int mpd_run_add_id_to(struct mpd_connection *" connection ","
+.BI "const char *" uri ", unsigned " to );
+.PP
+.BI "int mpd_recv_song_id(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_send_add ()
+function appends a 
+.I file
+to the playlist: either a single song or a directory
+(added recursively). The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_add ()
+function is a shortcut for
+.BR mpd_send_add ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_add_id ()
+function appends a 
+.I file
+to the playlist. For this function, 
+.I file
+is always a single file or URL. Call
+.BR mpd_recv_song_id ()
+for its id. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_add_id ()
+function is a shortcut for
+.BR mpd_send_add_id ()
+and
+.BR mpd_recv_song_id ().
+.PP
+The
+.BR mpd_send_add_id_to ()
+function appends a 
+.I file
+to the position
+.I to
+of the playlist. For this function, 
+.I file
+is always a single file or URL. Call
+.BR mpd_recv_song_id ()
+for its id. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_add_id_to ()
+function is a shortcut for
+.BR mpd_send_add_id_to ()
+and
+.BR mpd_recv_song_id ().
+.PP
+The
+.BR mpd_recv_song_id ()
+returns the id of the enw song in the playlist. It should be called after
+.BR mpd_send_add_id ()
+or
+.BR mpd_send_add_id_to ().
+The function receives a
+.I connection
+to the MPD server.
+.SH RETURN VALUE
+.BR mpd_send_add (),
+.BR mpd_run_add (),
+.BR mpd_send_add_id (),
+.BR mpd_send_add_id_to ()
+return true on success, false on error.
+.PP
+.BR mpd_run_add_id (),
+.BR mpd_run_add_id_to (),
+.BR mpd_recv_song_id ()
+return the new song id, -1 on error or if MPD did not send an id.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_list_queue_meta (3),
+.BR mpd_send_list_queue_range_meta (3),
+.BR mpd_send_get_queue_song_pos (3),
+.BR mpd_run_get_queue_song_pos (3),
+.BR mpd_send_get_queue_song_id (3),
+.BR mpd_run_get_queue_song_id (3),
+.BR mpd_send_queue_changes_meta (3),
+.BR mpd_send_queue_changes_meta_range (3),
+.BR mpd_send_queue_changes_brief (3),
+.BR mpd_send_queue_changes_brief_range (3),
+.BR mpd_recv_queue_change_brief (3),
+.BR mpd_send_delete (3),
+.BR mpd_run_delete (3),
+.BR mpd_send_delete_range (3),
+.BR mpd_run_delete_range (3),
+.BR mpd_send_delete_id (3),
+.BR mpd_run_delete_id (3),
+.BR mpd_send_shuffle (3),
+.BR mpd_run_shuffle (3),
+.BR mpd_send_shuffle_range (3),
+.BR mpd_run_shuffle_range (3),
+.BR mpd_send_clear (3),
+.BR mpd_run_clear (3),
+.BR mpd_send_move (3),
+.BR mpd_run_move (3),
+.BR mpd_send_move_id (3),
+.BR mpd_run_move_id (3),
+.BR mpd_send_move_range (3),
+.BR mpd_run_move_range (3),
+.BR mpd_send_swap (3),
+.BR mpd_run_swap (3),
+.BR mpd_send_swap_id (3),
+.BR mpd_run_swap_id (3),
+.BR mpd_send_add_tag_id (3),
+.BR mpd_run_add_tag_id (3),
+.BR mpd_send_clear_tag_id (3),
+.BR mpd_run_clear_tag_id (3),
+.BR mpd_send_clear_all_tag_id (3),
+.BR mpd_run_clear_all_tag_id (3),
+.BR mpd_send_prio (3),
+.BR mpd_run_prio (3),
+.BR mpd_send_prio_range (3),
+.BR mpd_run_prio_range (3),
+.BR mpd_send_prio_id (3),
+.BR mpd_run_prio_id (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

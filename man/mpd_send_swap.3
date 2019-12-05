@@ -1,0 +1,111 @@
+.TH MPD_SEND_MOVE 3 2019
+.SH NAME
+mpd_send_swap, mpd_run_swap, mpd_send_swap_id, mpd_run_swap_id \- swap the
+position of two songs in the queue (current playlist)
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_swap(struct mpd_connection *" connection ","
+.BI "unsigned " pos1 ", unsigned " pos2 );
+.PP
+.BI "bool mpd_run_swap(struct mpd_connection *" connection ","
+.BI "unsigned " pos1 ", unsigned " pos2 );
+.PP
+.BI "bool mpd_send_swap_id(struct mpd_connection *" connection ","
+.BI "unsigned " id1 ", unsigned " id2 );
+.PP
+.BI "bool mpd_run_swap_id(struct mpd_connection *" connection ","
+.BI "unsigned " id1 ", unsigned " id2 );
+.SH DESCRIPTION
+The
+.BR mpd_send_swap ()
+function swaps the songs of positions
+.I pos1
+and
+.I pos2
+in the queue. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_swap ()
+function is a shortcut for
+.BR mpd_send_swap ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_swap_id ()
+function swaps the songs of ids
+.I id1
+and
+.I id2
+in the queue. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_swap_id ()
+function is a shortcut for
+.BR mpd_send_swap_id ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_list_queue_meta (3),
+.BR mpd_send_list_queue_range_meta (3),
+.BR mpd_send_get_queue_song_pos (3),
+.BR mpd_run_get_queue_song_pos (3),
+.BR mpd_send_get_queue_song_id (3),
+.BR mpd_run_get_queue_song_id (3),
+.BR mpd_send_queue_changes_meta (3),
+.BR mpd_send_queue_changes_meta_range (3),
+.BR mpd_send_queue_changes_brief (3),
+.BR mpd_send_queue_changes_brief_range (3),
+.BR mpd_recv_queue_change_brief (3),
+.BR mpd_send_add (3),
+.BR mpd_run_add (3),
+.BR mpd_send_add_id (3),
+.BR mpd_run_add_id (3),
+.BR mpd_send_add_id_to (3),
+.BR mpd_run_add_id_to (3),
+.BR mpd_recv_song_id (3),
+.BR mpd_send_delete (3),
+.BR mpd_run_delete (3),
+.BR mpd_send_delete_range (3),
+.BR mpd_run_delete_range (3),
+.BR mpd_send_delete_id (3),
+.BR mpd_run_delete_id (3),
+.BR mpd_send_shuffle (3),
+.BR mpd_run_shuffle (3),
+.BR mpd_send_shuffle_range (3),
+.BR mpd_run_shuffle_range (3),
+.BR mpd_send_clear (3),
+.BR mpd_run_clear (3),
+.BR mpd_send_move (3),
+.BR mpd_run_move (3),
+.BR mpd_send_move_id (3),
+.BR mpd_run_move_id (3),
+.BR mpd_send_move_range (3),
+.BR mpd_run_move_range (3),
+.BR mpd_send_add_tag_id (3),
+.BR mpd_run_add_tag_id (3),
+.BR mpd_send_clear_tag_id (3),
+.BR mpd_run_clear_tag_id (3),
+.BR mpd_send_clear_all_tag_id (3),
+.BR mpd_run_clear_all_tag_id (3),
+.BR mpd_send_prio (3),
+.BR mpd_run_prio (3),
+.BR mpd_send_prio_range (3),
+.BR mpd_run_prio_range (3),
+.BR mpd_send_prio_id (3),
+.BR mpd_run_prio_id (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

@@ -1,0 +1,141 @@
+.TH MPD_SEND_DELETE 3 2019
+.SH NAME
+mpd_send_delete, mpd_run_delete, mpd_send_delete_range, mpd_run_delete_range,
+mpd_send_delete_id, mpd_run_delete_id \- remove a song to the queue (current
+playlist)
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_delete(struct mpd_connection *" connection ","
+.BI "unsigned " pos );
+.PP
+.BI "bool mpd_run_delete(struct mpd_connection *" connection ","
+.BI "unsigned " pos );
+.PP
+.BI "bool mpd_send_delete_range(struct mpd_connection *" connection ","
+.BI "unsigned " start ", unsigned " end );
+.PP
+.BI "bool mpd_run_delete_range(struct mpd_connection *" connection ","
+.BI "unsigned " start ", unsigned " end );
+.PP
+.BI "bool mpd_send_delete_id(struct mpd_connection *" connection ","
+.BI "unsigned " id );
+.PP
+.BI "bool mpd_run_delete_id(struct mpd_connection *" connection ","
+.BI "unsigned " id );
+.SH DESCRIPTION
+The
+.BR mpd_send_delete ()
+function deletes the song at position
+.I pos
+from the queue. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_delete ()
+function is a shortcut for
+.BR mpd_send_delete ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_delete_range ()
+function deletes a range of songs from the queue: from the
+.I start
+position (including) up to the
+.I end
+position (excluding); the special value
+.I UINT_MAX
+makes the
+.I end
+of the range open. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_delete_range ()
+function is a shortcut for
+.BR mpd_send_delete_range ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_delete_id ()
+deletes the song
+.I id
+from the queue. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_delete_id ()
+function is a shortcut for
+.BR mpd_send_delete_id ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The use of
+.I UINT_MAX
+in
+.BR mpd_send_delete_range ()
+and
+.BR mpd_run_delete_range ()
+was added in libmpdclient 2.8.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_list_queue_meta (3),
+.BR mpd_send_list_queue_range_meta (3),
+.BR mpd_send_get_queue_song_pos (3),
+.BR mpd_run_get_queue_song_pos (3),
+.BR mpd_send_get_queue_song_id (3),
+.BR mpd_run_get_queue_song_id (3),
+.BR mpd_send_queue_changes_meta (3),
+.BR mpd_send_queue_changes_meta_range (3),
+.BR mpd_send_queue_changes_brief (3),
+.BR mpd_send_queue_changes_brief_range (3),
+.BR mpd_recv_queue_change_brief (3),
+.BR mpd_send_add (3),
+.BR mpd_run_add (3),
+.BR mpd_send_add_id (3),
+.BR mpd_run_add_id (3),
+.BR mpd_send_add_id_to (3),
+.BR mpd_run_add_id_to (3),
+.BR mpd_recv_song_id (3),
+.BR mpd_send_shuffle (3),
+.BR mpd_run_shuffle (3),
+.BR mpd_send_shuffle_range (3),
+.BR mpd_run_shuffle_range (3),
+.BR mpd_send_clear (3),
+.BR mpd_run_clear (3),
+.BR mpd_send_move (3),
+.BR mpd_run_move (3),
+.BR mpd_send_move_id (3),
+.BR mpd_run_move_id (3),
+.BR mpd_send_move_range (3),
+.BR mpd_run_move_range (3),
+.BR mpd_send_swap (3),
+.BR mpd_run_swap (3),
+.BR mpd_send_swap_id (3),
+.BR mpd_run_swap_id (3),
+.BR mpd_send_add_tag_id (3),
+.BR mpd_run_add_tag_id (3),
+.BR mpd_send_clear_tag_id (3),
+.BR mpd_run_clear_tag_id (3),
+.BR mpd_send_clear_all_tag_id (3),
+.BR mpd_run_clear_all_tag_id (3),
+.BR mpd_send_prio (3),
+.BR mpd_run_prio (3),
+.BR mpd_send_prio_range (3),
+.BR mpd_run_prio_range (3),
+.BR mpd_send_prio_id (3),
+.BR mpd_run_prio_id (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
