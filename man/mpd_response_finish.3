@@ -1,0 +1,39 @@
+.TH MPD_RESPONSE_FINISH 3 2019
+.SH NAME
+mpd_response_finish, mpd_response_next \- manipulate MPD server responses
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_response_finish(struct mpd_connection *"connection );
+.PP
+.BI "bool mpd_response_next(struct mpd_connection *" connection );
+.SH DESCRIPTION
+The
+.BR mpd_response_finish ()
+function finishes the response and checks if the command was successful. If
+there are data pairs left, they are discarded. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_response_next ()
+function finishes the response of the current list command (i.e.
+.BR mpd_command_list_end (3)).
+If there are data
+pairs left, they are discarded. The function receives a
+.I connection
+to the MPD server.
+.SH RETURN VALUE
+.BR mpd_response_finish ()
+and
+.BR mpd_response_next ()
+return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_command_list_end (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
