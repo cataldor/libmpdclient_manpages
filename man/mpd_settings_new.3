@@ -1,0 +1,114 @@
+.TH MPD_SETTINGS_NEW 3 2019
+.SH NAME
+mpd_settings_new, mpd_settings_free, mpd_settings_get_host,
+mpd_settings_get_port, mpd_settings_get_timeout_ms, mpd_settings_get_password
+\- manipulate the mpd_settings object
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_settings *mpd_settings_new(const char *" host ","
+.BI "unsigned " port ", unsigned " timeout_ms ", const char *" reserved ","
+.BI "const char *" password );
+.PP
+.BI "void mpd_settings_free(struct mpd_settings *" settings );
+.PP
+.BI "const char *mpd_settings_get_host(const struct mpd_settings *" settings );
+.PP
+.BI "unsigned mpd_settings_get_port(const struct mpd_settings *" settings );
+.PP
+.BI "unsigned mpd_settings_get_timeout_ms(const"
+.BI "struct mpd_settings *" settings );
+.PP
+.BI "const char *mpd_settings_get_password(const"
+.BI "struct mpd_settings *" settings );
+.SH DESCRIPTION
+The
+.BR mpd_settings_new ()
+function creates a new mpd_settings object. 
+The values which are not passed by the caller are
+.IR "taken from environment variables" .
+The function takes the following arguments:
+.TP
+.B host
+the server's hostname, IP address or Unix socket path. An address starting
+with '@' detones an \(lqabstract socket\(rq. NULL is allowed here, which will
+connect to the default host (using the
+.I MPD_HOST
+environment variable if present).
+.TP
+.B port
+the TCP port to connect to, 0 for default port (using the
+.I MPD_PORT
+environment variable if present). If
+.I host
+is a unix socket path, this parameter is ignored.
+.TP
+.B timeout_ms
+the timeout in milliseconds, 0 for the default timeout (the environment variable
+.I MPD_TIMEOUT
+may specify a timeout in seconds).
+.TP
+.B reserved
+reserved for future use, pass NULL.
+.TP
+.B password
+the password, or NULL to use the default
+.RI ( MPD_HOST
+before \(lq@\(rq).
+.PP
+The
+.BR mpd_settings_free ()
+function releases the mpd_settings object.
+.PP
+The
+.BR mpd_settings_get_host ()
+function returns the host name (without password/port), or NULL if unknown.
+.PP
+The
+.BR mpd_settings_get_port ()
+function returns the port number, or 0 if not applicable.
+.PP
+The
+.BR mpd_settings_get_timeout_ms ()
+function returns the timeout in milliseconds, or 0 if unknown.
+.PP
+The
+.BR mpd_settings_get_password ()
+function returns the password, or NULL if none was configured.
+.SH RETURN VALUE
+.BR mpd_send_command ()
+return a
+.I mpd_settings
+object or NULL if out of memory.
+.PP
+.BR mpd_settings_get_host ()
+and
+.BR mpd_settings_get_password ()
+return the host name (without password/port) and password, or NULL if unknown
+and if none was configured, respectively, as a
+.IR "const char *" .
+.PP
+.BR mpd_settings_get_port ()
+and
+.BR mpd_settings_get_timeout_ms ()
+return the port number and the timeout in milliseconds, or 0 if not applicable
+and unknown, respectively, as a
+.IR "unsigned" .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_settings_new (),
+.BR mpd_settings_free (),
+.BR mpd_settings_get_host (),
+.BR mpd_settings_get_port (),
+.BR mpd_settings_get_timeout_ms (),
+.BR mpd_settings_get_password ()
+functions were added to libmpdclient 2.4.
+.SH SEE ALSO
+.BR mpd_connection_get_settings (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
