@@ -1,0 +1,270 @@
+.TH MPD_SONG_GET_URI 3 2019
+.SH NAME
+mpd_song_get_uri, mpd_song_get_tag, mpd_song_get_duration,
+mpd_song_get_duration_ms, mpd_song_get_start, mpd_song_get_end,
+mpd_song_get_last_modified, mpd_song_set_pos, mpd_song_get_pos,
+mpd_song_get_id, mpd_song_get_prio, mpd_song_get_audio_format \- manipulate
+mpd_song objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "const char *mpd_song_get_uri(const struct mpd_song *" song );
+.PP
+.BI "const char *mpd_song_get_tag(const struct mpd_song *" song ","
+.BI "enum mpd_tag_type " type ", unsigned " idx );
+.PP
+.BI "unsigned mpd_song_get_duration(const struct mpd_song *" song );
+.PP
+.BI "unsigned mpd_song_get_duration_ms(const struct mpd_song *" song );
+.PP
+.BI "unsigned mpd_song_get_start(const struct mpd_song *" song );
+.PP
+.BI "unsigned mpd_song_get_end(const struct mpd_song *" song );
+.PP
+.BI "time_t mpd_song_get_last_modified(const struct mpd_song *" song );
+.PP
+.BI "unsigned mpd_song_get_pos(const struct mpd_song *" song );
+.PP
+.BI "unsigned mpd_song_get_id(const struct mpd_song *" song );
+.PP
+.BI "unsigned mpd_song_get_prio(const struct mpd_song *" song );
+.PP
+.BI "const struct mpd_audio_format *mpd_song_get_audio_format(const"
+.BI "struct mpd_song *" song );
+.PP
+.BI "void mpd_song_set_pos(struct mpd_song *" song ", unsigned " pos );
+.SH DESCRIPTION
+The
+.BR mpd_song_get_uri ()
+function returns the URI of the
+.IR song .
+This is either a path relative to the MPD music directory (without leading
+slash), or an URL with a scheme, e.g., a HTTP URL for a radio stream.
+.PP
+The
+.BR mpd_song_get_tag ()
+function queries a tag
+.I type
+value of the 
+.I song
+object. You should start with
+.I idx
+zeroed to get the first value for this tag
+.IR type .
+This argument may be used to iterate all values, until this function returns
+NULL.
+.PP
+The
+.BR mpd_song_get_duration ()
+function returns the duration of this
+.I song
+in seconds. 0 means the duration is unknown.
+.PP
+The
+.BR mpd_song_get_duration_ms ()
+function returns the duration of this
+.I song
+in milliseconds. 0 means the duration is unknown.
+.PP
+The
+.BR mpd_song_get_start ()
+function returns the start of the virtual
+.I song
+within the physical file in seconds.
+.PP
+The
+.BR mpd_song_get_end ()
+function returns the end of the virtual
+.I song
+within the physical file in seconds. 0 means that the physical song file is
+played to the end.
+.PP
+The
+.BR mpd_song_get_last_modified ()
+function returns the POSIX UTC timestamp of the last modification of this
+.IR song ,
+or 0 if that is unknown.
+.PP
+The
+.BR mpd_song_get_pos ()
+function returns the position of this
+.I song
+in the queue.
+.I The value is undefined
+if you did not obtain this
+.I song
+from the queue.
+.PP
+The
+.BR mpd_song_get_id ()
+function returns the id of this
+.I song
+in the queue.
+.I The value is undefined
+if you did not obtain this
+.I song
+from the queue.
+.PP
+The
+.BR mpd_song_get_prio ()
+function returns the priority of this
+.I song
+in the queue.
+.I The value is undefined
+if you did not obtain this
+.I song
+from the queue.
+.PP
+The
+.BR mpd_song_get_audio_format ()
+function returns a
+.I mpd_audio_format
+object as determined by MPD's decoder plugin. May return NULL if the format is
+not available or unknown.
+.PP
+The
+.BR mpd_song_set_pos ()
+function sets the position 
+.I pos
+for this
+.I song
+within the queue. This value is not used for songs which are not in the queue.
+This function is useful when applying the values returned by
+.BR mpd_recv_queue_change_brief (3).
+.SS The mpd_tag_type enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT
+ * @since libmpdclient 2.17 added support for #MPD_TAG_LABEL and #MPD_TAG_MUSICBRAINZ_WORKID.
+ */
+enum mpd_tag_type
+{
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
+	MPD_TAG_ARTIST,
+	MPD_TAG_ALBUM,
+	MPD_TAG_ALBUM_ARTIST,
+	MPD_TAG_TITLE,
+	MPD_TAG_TRACK,
+	MPD_TAG_NAME,
+	MPD_TAG_GENRE,
+	MPD_TAG_DATE,
+	MPD_TAG_COMPOSER,
+	MPD_TAG_PERFORMER,
+	MPD_TAG_COMMENT,
+	MPD_TAG_DISC,
+
+	MPD_TAG_MUSICBRAINZ_ARTISTID,
+	MPD_TAG_MUSICBRAINZ_ALBUMID,
+	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
+	MPD_TAG_MUSICBRAINZ_TRACKID,
+	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+
+	MPD_TAG_ORIGINAL_DATE,
+
+	MPD_TAG_ARTIST_SORT,
+	MPD_TAG_ALBUM_ARTIST_SORT,
+
+	MPD_TAG_ALBUM_SORT,
+	MPD_TAG_LABEL,
+	MPD_TAG_MUSICBRAINZ_WORKID,
+
+	MPD_TAG_GROUPING,
+	MPD_TAG_WORK,
+	MPD_TAG_CONDUCTOR,
+
+	/* IMPORTANT: the ordering of tag types above must be
+	   retained, or else the libmpdclient ABI breaks */
+
+	MPD_TAG_COUNT
+};
+.EE
+.in
+.SH RETURN VALUE
+.BR mpd_song_get_uri ()
+returns the URI of the 
+.IR song .
+.PP
+.BR mpd_song_get_tag ()
+returns the 
+.IR idx th
+value for the tag
+.I type
+of the
+.I song
+object or NULL when there are no more tag values.
+.PP
+.BR mpd_get_duration ()
+and
+.BR mpd_get_duration_ms ()
+return the duration of the
+.I song
+in seconds and milliseconds, or 0 if unknown, respectively.
+.PP
+.BR mpd_song_get_start ()
+and
+.BR mpd_song_get_end ()
+returns the start and end of the virtual
+.I song
+within the physical file in seconds, respectively. For
+.BR mpd_song_get_end (),
+a returned value of zero means that the
+.I song
+is played to the end.
+.PP
+.BR mpd_song_get_pos (),
+.BR mpd_song_get_id (),
+.BR mpd_song_get_prio ()
+return the position, id, and priority of the
+.IR song .
+.I The value is undefined
+if you did not obtain this
+.I song
+from the queue.
+.PP
+.BR mpd_song_get_audio_format ()
+returns a
+.I mpd_audio_format
+object or NULL if the format is available or unknown.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_song_get_start ()
+and
+.BR mpd_song_get_end ()
+functions were added to libmpdclient 2.3.
+.PP
+The
+.BR mpd_song_get_prio ()
+function was added to libmpdclient 2.8.
+.PP
+The
+.BR mpd_song_get_duration_ms ()
+function was added to libmpdclient 2.10.
+.PP
+The
+.BR mpd_song_get_audio_format ()
+function was added to libmpdclient 2.15.
+.SH SEE ALSO
+.BR mpd_recv_queue_change_brief (3),
+.BR mpd_song_begin (3),
+.BR mpd_song_feed (3),
+.BR mpd_recv_song (3),
+.BR mpd_song_dup (3),
+.BR mpd_song_free (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

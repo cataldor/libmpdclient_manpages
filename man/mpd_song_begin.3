@@ -1,0 +1,95 @@
+.TH MPD_SONG_BEGIN 3 2019
+.SH NAME
+mpd_song_begin, mpd_song_feed, mpd_recv_song,
+mpd_song_dup, mpd_song_free \- create/destroy mpd_song objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_song *mpd_song_begin(const struct mpd_pair *" pair );
+.PP
+.BI "bool mpd_song_feed(struct mpd_song *" song ","
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "struct mpd_song *mpd_recv_song(struct mpd_song *" song );
+.PP
+.BI "struct mpd_song *mpd_song_dup(const struct mpd_song *" song );
+.PP
+.BI "void mpd_song_free(struct mpd_song *" song );
+.SH DESCRIPTION
+The
+.BR mpd_song_begin ()
+function begins parsing a new song object from the
+.I pair
+received from the MPD server. 
+.PP
+The
+.BR mpd_song_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I song
+object.
+.PP
+The
+.BR mpd_recv_song ()
+function receives the next song from the MPD server. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_song_dup ()
+function duplicates the specified
+.I song
+object.
+.PP
+The
+.BR mpd_song_free ()
+function frees a 
+.I song
+object.
+.SH RETURN VALUE
+.BR mpd_song_begin ()
+returns a new
+.I mpd_song
+object, or NULL on error (out of memory or wrong pair name).
+.PP
+.BR mpd_song_feed ()
+returns true if the
+.I pair
+was parsed and added to the
+.I song
+(or if the
+.I pair
+was not understood and ignored), false if this
+.I pair
+is the beginning of the next neighbor.
+.PP
+.BR mpd_recv_song ()
+returns a
+.I mpd_song
+object, or NULL on error or if the song list is finished.
+.PP
+.BR mpd_song_dup ()
+returns a copy of the specified
+.I mpd_song
+object, or NULL if out of memory.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_song_get_uri (3),
+.BR mpd_song_get_tag (3),
+.BR mpd_song_get_duration (3),
+.BR mpd_song_get_duration_ms (3),
+.BR mpd_song_get_start (3),
+.BR mpd_song_get_end (3),
+.BR mpd_song_get_last_modified (3),
+.BR mpd_song_set_pos (3),
+.BR mpd_song_get_pos (3),
+.BR mpd_song_get_id (3),
+.BR mpd_song_get_prio (3),
+.BR mpd_song_get_audio_format (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
