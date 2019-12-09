@@ -10,7 +10,7 @@ mpd_song_dup, mpd_song_free \- create/destroy mpd_song objects
 .BI "bool mpd_song_feed(struct mpd_song *" song ","
 .BI "const struct mpd_pair *" pair );
 .PP
-.BI "struct mpd_song *mpd_recv_song(struct mpd_song *" song );
+.BI "struct mpd_song *mpd_recv_song(struct mpd_connection *" connection );
 .PP
 .BI "struct mpd_song *mpd_song_dup(const struct mpd_song *" song );
 .PP
