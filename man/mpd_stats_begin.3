@@ -9,7 +9,7 @@ mpd_stats_free \- create/destroy mpd_stats objects
 .PP
 .BI "bool mpd_send_stats(struct mpd_connection *" connection );
 .PP
-.BI "bool mpd_run_stats(struct mpd_connection *" connection );
+.BI "struct mpd_stats *mpd_run_stats(struct mpd_connection *" connection );
 .PP
 .BI "void mpd_stats_feed(struct mpd_stats *" status ","
 .BI "const struct mpd_pair *" pair );
@@ -25,7 +25,9 @@ function creats a new empty stats object.
 The
 .BR mpd_send_stats ()
 function send the \(lqstats\(rq command to MPD: receive statistics from the
-database. The function receives a
+database. Call
+.BR mpd_recv_stats ()
+to receive the response. The function receives a
 .I connection
 to the MPD server.
 .PP
@@ -34,7 +36,7 @@ The
 function is a shortcut for
 .BR mpd_send_stats ()
 and
-.BR mpd_response_finish (3).
+.BR mpd_recv_status ().
 .PP
 The
 .BR mpd_stats_feed ()
@@ -51,22 +53,22 @@ function receives the stats from the MPD server. The function receives a
 to the MPD server.
 .PP
 The
-.BR mpd_song_free ()
+.BR mpd_stats_free ()
 function frees a 
-.I song
+.I stats
 object.
 .SH RETURN VALUE
-.BR mpd_song_begin ()
+.BR mpd_stats_begin ()
 returns a new
 .I mpd_stats
 object, or NULL on error (out of memory).
 .PP
 .BR mpd_send_stats ()
-and
+returns true on success, false on error.
+.PP
+.PP
 .BR mpd_run_stats ()
-return true on success, false on error.
-.PP
-.PP
+and
 .BR mpd_recv_stats ()
 returns a
 .I mpd_stats
