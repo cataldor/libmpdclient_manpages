@@ -1,0 +1,110 @@
+.TH MPD_STATS_GET_NUMBER_OF_ARTISTS 3 2019
+.SH NAME
+mpd_stats_get_number_of_artists, mpd_stats_get_number_of_albums,
+mpd_stats_get_number_of_songs, mpd_stats_get_uptime,
+mpd_stats_get_db_update_time, mpd_stats_get_play_time,
+mpd_stats_get_db_play_time \- fetch mpd_stats information
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "unsigned mpd_stats_get_number_of_artists(const struct mpd_stats *" stats );
+.PP
+.BI "unsigned mpd_stats_get_number_of_albums(const struct mpd_stats *" stats );
+.PP
+.BI "unsigned mpd_stats_get_number_of_songs(const struct mpd_stats *" stats );
+.PP
+.BI "unsigned long mpd_stats_get_uptime(const struct mpd_stats *" stats );
+.PP
+.BI "unsigned long mpd_stats_get_db_update_time(const"
+.BI "struct mpd_stats *" stats );
+.PP
+.BI "unsigned long mpd_stats_get_play_time(const struct mpd_stats *" stats );
+.PP
+.BI "unsigned long mpd_stats_get_db_play_time(const struct mpd_stats *" stats );
+.SH DESCRIPTION
+The
+.BR mpd_stats_get_number_of_artists ()
+function returns the number of distinct artists in MPD's database
+.RI ( stats ),
+or 0 if unknown.
+.PP
+The
+.BR mpd_stats_get_number_of_albums ()
+function returns the number of distinct album names in MPD's database
+.RI ( stats ),
+or 0 if unknown.
+.PP
+The
+.BR mpd_stats_get_number_of_songs ()
+function returns the total number of songs in MPD's database
+.RI ( stats ),
+or 0 if unknown.
+.PP
+The
+.BR mpd_stats_get_uptime ()
+function returns the uptime of MPD in seconds, or 0 if unknown.
+.PP
+The
+.BR mpd_stats_get_db_update_time ()
+function returns the UNIX timestamp of the last database update from MPD's
+database
+.RI ( stats ),
+or 0 if unknown.
+.PP
+The
+.BR mpd_stats_get_play_time ()
+function returns the accumulated time MPD was playing music since the process
+was started, or 0 if unknown. The function receives the
+.I stats
+object.
+.PP
+The
+.BR mpd_stats_get_db_play_time ()
+function returns the accumulated duration of all songs in the database
+.RI ( stats ),
+or 0 if unknown.
+.SH RETURN VALUE
+.BR mpd_stats_get_number_of_artists ()
+returns the number of distinct artists in MPD's database (or 0 if unknown) as
+a
+.IR unsigned .
+.PP
+.BR mpd_stats_get_number_of_albums ()
+returns the number of distinct albums in MPD's database (or 0 if unknown) as a
+.IR unsigned .
+.PP
+.BR mpd_stats_get_number_of_songs ()
+returns the total number of song files in MPD's database (or 0 if unknown) as a
+.IR unsigned .
+.PP
+.BR mpd_stats_get_number_get_uptime ()
+returns the uptime of MPD in seconds (or 0 if unknown) as a
+.IR "long unsigned" .
+.PP
+.BR mpd_stats_get_number_get_db_uptime ()
+returns the UNIX timestamp of the last database update (or 0 if unknown) as a
+.IR "long unsigned" .
+.PP
+.BR mpd_stats_get_play_time ()
+returns the accumulated time MPD was playing music since the process was
+started (or 0 if unknown) as a 
+.IR "long unsigned" .
+.PP
+.BR mpd_stats_get_db_play_time ()
+returns the accumulated duration of all songs in MPD's database (or 0 if
+unknown) as a
+.IR "long unsigned" .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_stats_begin (3),
+.BR mpd_send_stats (3),
+.BR mpd_run_stats (3),
+.BR mpd_stats_feed (3),
+.BR mpd_recv_stats (3),
+.BR mpd_stats_free (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

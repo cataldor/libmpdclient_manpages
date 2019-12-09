@@ -1,0 +1,88 @@
+.TH MPD_STATS_BEGIN 3 2019
+.SH NAME
+mpd_stats_begin, mpd_send_stats, mpd_run_stats, mpd_stats_feed, mpd_recv_stats,
+mpd_stats_free \- create/destroy mpd_stats objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_stats *mpd_stat_begin(void);"
+.PP
+.BI "bool mpd_send_stats(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_stats(struct mpd_connection *" connection );
+.PP
+.BI "void mpd_stats_feed(struct mpd_stats *" status ","
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "struct mpd_stats *mpd_recv_stats(struct mpd_connection *" connection );
+.PP
+.BI "void mpd_stats_free(struct mpd_stats *" stats );
+.SH DESCRIPTION
+The
+.BR mpd_stats_begin ()
+function creats a new empty stats object. 
+.PP
+The
+.BR mpd_send_stats ()
+function send the \(lqstats\(rq command to MPD: receive statistics from the
+database. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_stats ()
+function is a shortcut for
+.BR mpd_send_stats ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_stats_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I stats
+object.
+.PP
+The
+.BR mpd_recv_stats ()
+function receives the stats from the MPD server. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_song_free ()
+function frees a 
+.I song
+object.
+.SH RETURN VALUE
+.BR mpd_song_begin ()
+returns a new
+.I mpd_stats
+object, or NULL on error (out of memory).
+.PP
+.BR mpd_send_stats ()
+and
+.BR mpd_run_stats ()
+return true on success, false on error.
+.PP
+.PP
+.BR mpd_recv_stats ()
+returns a
+.I mpd_stats
+object, or NULL on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_stats_get_number_of_artists (3),
+.BR mpd_stats_get_number_of_albums (3),
+.BR mpd_stats_get_number_of_songs (3),
+.BR mpd_stats_get_uptime (3),
+.BR mpd_stats_get_db_update_time (3),
+.BR mpd_stats_get_play_time (3),
+.BR mpd_stats_get_db_play_time (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
