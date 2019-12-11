@@ -1,0 +1,27 @@
+.TH LIBMPDCLIENT_CHECK_VERSION 3 2019
+.SH NAME
+LIBMPDCLIENT_CHECK_VERSION \- check libmpdclient version
+objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "LIBMPDCLIENT_CHECK_VERSION(" major ", " minor ", " patch );
+.SH DESCRIPTION
+The
+.BR LIBMPDCLIENT_CHECK_VERSION ()
+macro allows you to check which version of libmpdclient you are compiling with.
+The function receives the version as a 3-tuple of
+.IR major ,
+.IR minor ,
+.IR patch
+version.
+.SH RETURN VALUE
+.BR LIBMPDCLIENT_CHECK_VERSION ()
+returns 1 if this libmpdclient version equals or is newer than the specified
+version number (tuple
+.IR major ,
+.IR minor ,
+.IR patch );
+0 otherwise.
+.SH ERRORS
+No errors are defined
