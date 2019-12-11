@@ -1,0 +1,104 @@
+.TH MPD_STATUS_BEGIN 3 2019
+.SH NAME
+mpd_status_begin, mpd_send_status, mpd_run_status, mpd_status_feed,
+mpd_recv_status, mpd_status_free \- create/destroy mpd_stats objects
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "struct mpd_status *mpd_status_begin(void);"
+.PP
+.BI "bool mpd_send_status(struct mpd_connection *" connection );
+.PP
+.BI "struct mpd_status *mpd_run_status(struct mpd_connection *" connection );
+.PP
+.BI "void mpd_status_feed(struct mpd_status *" status ","
+.BI "const struct mpd_pair *" pair );
+.PP
+.BI "struct mpd_status *mpd_recv_status(struct mpd_connection *" connection );
+.PP
+.BI "void mpd_status_free(struct mpd_status *" status );
+.SH DESCRIPTION
+The
+.BR mpd_status_begin ()
+function creates a new empty status object. 
+.PP
+The
+.BR mpd_send_status ()
+function sends the \(lqstatus\(rq command to MPD: receive the current status
+from MPD. Call
+.BR mpd_recv_status ()
+to receive the response. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_status ()
+function is a shortcut for
+.BR mpd_send_status ()
+and
+.BR mpd_recv_status ().
+.PP
+The
+.BR mpd_status_feed ()
+function parses the
+.IR pair ,
+adding its information to the specified
+.I status
+object.
+.PP
+The
+.BR mpd_recv_status ()
+function receives the status from the MPD server. The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_status_free ()
+function frees a 
+.I status
+object.
+.SH RETURN VALUE
+.BR mpd_status_begin ()
+returns a new
+.I mpd_status
+object, or NULL on error (out of memory).
+.PP
+.BR mpd_send_status ()
+returns true on success, false on error.
+.PP
+.BR mpd_run_status ()
+and
+.BR mpd_recv_stats ()
+returns a
+.I mpd_status
+object, or NULL on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_status_get_volume (3),
+.BR mpd_status_get_repeat (3),
+.BR mpd_status_get_random (3),
+.BR mpd_status_get_single (3),
+.BR mpd_status_get_consume (3),
+.BR mpd_status_get_queue_length (3),
+.BR mpd_status_get_queue_version (3),
+.BR mpd_status_get_state (3),
+.BR mpd_status_get_crossfade (3),
+.BR mpd_status_get_mixrampdb (3),
+.BR mpd_status_get_mixrampdelay (3),
+.BR mpd_status_get_song_pos (3),
+.BR mpd_status_get_song_id (3),
+.BR mpd_status_get_next_song_pos (3),
+.BR mpd_status_get_next_song_id (3),
+.BR mpd_status_get_elapsed_time (3),
+.BR mpd_status_get_elapsed_ms (3),
+.BR mpd_status_get_total_time (3),
+.BR mpd_status_get_kbit_rate (3),
+.BR mpd_status_get_audio_format (3),
+.BR mpd_status_get_update_id (3),
+.BR mpd_status_get_error (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

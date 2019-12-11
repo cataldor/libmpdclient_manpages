@@ -1,0 +1,112 @@
+.TH MPD_STATUS_GET_VOLUME 3 2019
+.SH NAME
+mpd_status_get_volume, mpd_status_get_repeat, mpd_status_get_random,
+mpd_status_get_single, mpd_status_get_consume, mpd_status_get_queue_length,
+mpd_status_get_queue_version \- query mpd_status information 
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "int mpd_status_get_volume(const struct mpd_status *" status );
+.PP
+.BI "bool mpd_status_get_repeat(const struct mpd_status *" status );
+.PP
+.BI "bool mpd_status_get_random(const struct mpd_status *" status );
+.PP
+.BI "bool mpd_status_get_single(const struct mpd_status *" status );
+.PP
+.BI "bool mpd_status_get_consume(const struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_queue_length(const struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_queue_version(const struct mpd_status *" status );
+.SH DESCRIPTION
+The
+.BR mpd_status_get_volume ()
+function returns the current volume in MPD 
+.RI ( status ):
+from 0 to 100, or -1 when there is no
+volume.
+.PP
+The
+.BR mpd_status_get_repeat ()
+function returns true if repeat mode is on or false if repeat mode is off in MPD
+.RI ( status ).
+.PP
+The
+.BR mpd_status_get_random ()
+function returns true if random mode is on or false if random mode is off in MPD
+.RI ( status ).
+.PP
+The
+.BR mpd_status_get_single ()
+function returns true if single mode is on or false if single mode is off in MPD
+.RI ( status ).
+.PP
+The
+.BR mpd_status_get_consume ()
+function returns true if consume mode is on or false if consume mode is off on
+MPD
+.RI ( status ).
+.PP
+The
+.BR mpd_status_get_queue_length ()
+function returns the number of songs in the queue; if MPD
+.RI ( status )
+did not specify that, this function returns 0.
+.PP
+The
+.BR mpd_status_get_queue_version ()
+function returns the queue version number on the MPD
+.RI ( status );
+you may use this to determine when the queue has changed since you last
+queried it.
+.SH RETURN VALUE
+.BR mpd_status_get_volume ()
+returns the current volume in MPD as a
+.I int 
+from 0 to 100, or -1 when there is no volume.
+.PP
+.BR mpd_status_get_repeat (),
+.BR mpd_status_get_random (),
+.BR mpd_status_get_single (),
+.BR mpd_status_get_consume (),
+returns true if repeat, random, single, and consume mode is on, respectively.
+They return false if repeat, random, single, and consume mode is off,
+respectively.
+.PP
+.BR mpd_status_get_queue_length ()
+returns the length of the queue as a
+.IR unsigned .
+.PP
+.BR mpd_status_get_queue_version ()
+returns the version of the queue as a 31-bit
+.IR unsigned .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_status_begin (3),
+.BR mpd_send_status (3),
+.BR mpd_run_status (3),
+.BR mpd_status_feed (3),
+.BR mpd_recv_status (3),
+.BR mpd_status_free (3),
+.BR mpd_status_get_state (3),
+.BR mpd_status_get_crossfade (3),
+.BR mpd_status_get_mixrampdb (3),
+.BR mpd_status_get_mixrampdelay (3),
+.BR mpd_status_get_song_pos (3),
+.BR mpd_status_get_song_id (3),
+.BR mpd_status_get_next_song_pos (3),
+.BR mpd_status_get_next_song_id (3),
+.BR mpd_status_get_elapsed_time (3),
+.BR mpd_status_get_elapsed_ms (3),
+.BR mpd_status_get_total_time (3),
+.BR mpd_status_get_kbit_rate (3),
+.BR mpd_status_get_audio_format (3),
+.BR mpd_status_get_update_id (3),
+.BR mpd_status_get_error (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

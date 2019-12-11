@@ -1,0 +1,161 @@
+.TH MPD_STATUS_GET_STATE 3 2019
+.SH NAME
+mpd_status_get_state, mpd_status_get_crossfade, mpd_status_get_mixrampdb,
+mpd_status_get_mixrampdelay, mpd_status_get_song_pos, mpd_status_get_song_id,
+mpd_status_get_next_song_pos \- query mpd_status information 
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "enum mpd_state mpd_status_get_state(const struct mpd_status *" status );
+.PP
+.BI "float mpd_status_get_mixrampdb(const struct mpd_status *" status );
+.PP
+.BI "float mpd_status_get_mixrampdelay(const struct mpd_status *" status );
+.PP
+.BI "int mpd_status_get_song_pos(const struct mpd_status *" status );
+.PP
+.BI "int mpd_status_get_song_id(const struct mpd_status *" status );
+.PP
+.BI "int mpd_status_get_next_song_pos(const struct mpd_status *" status );
+.PP
+.BI "int mpd_status_get_next_song_id(const struct mpd_status *" status );
+.SH DESCRIPTION
+The
+.BR mpd_status_get_state ()
+function returns the current state in MPD 
+.RI ( status ):
+either stopped, playing or paused.
+.PP
+The
+.BR mpd_status_get_mixrampdb ()
+function returns mixrampdb setting in dB in MPD
+.RI ( status ).
+0.0 means mixrampdb is disabled.
+.PP
+The
+.BR mpd_status_get_mixrampdelay ()
+function returns mixrampdelay setting in seconds in MPD
+.RI ( status ).
+Negative means mixrampdelay is disabled.
+.PP
+The
+.BR mpd_status_get_song_pos ()
+function returns the position of the currently selected song (state is
+.I MPD_STATE_PLAY
+or
+.IR MPD_STATE_PAUSE ).
+If there is no current song, -1 is returned. The function receives the
+MPD
+.IR status .
+.PP
+The
+.BR mpd_status_get_song_id ()
+function returns the id of the currently selected song (state is
+.I MPD_STATE_PLAY
+or
+.IR MPD_STATE_PAUSE ).
+If there is no current song, -1 is returned. The function receives the
+MPD
+.IR status .
+.PP
+The
+.BR mpd_status_get_next_song_pos ()
+function works the same as
+.BR mpd_status_get_song_pos (),
+but for the next song to be played.
+.PP
+The
+.BR mpd_status_get_next_song_id ()
+function works the same as
+.BR mpd_status_get_song_id (),
+but for the next song to be played.
+.SS The mpd_state enum
+The
+.I mpd_state
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * MPD's playback state.
+ */
+enum mpd_state {
+	/** no information available */
+	MPD_STATE_UNKNOWN = 0,
+
+	/** not playing */
+	MPD_STATE_STOP = 1,
+
+	/** playing */
+	MPD_STATE_PLAY = 2,
+
+	/** playing, but paused */
+	MPD_STATE_PAUSE = 3,
+};
+.EE
+.in
+.SH RETURN VALUE
+.BR mpd_status_get_state ()
+returns the current state in MPD as a
+.I mpd_state
+object.
+.PP
+.BR mpd_status_get_mixrampdb ()
+returns mixrampdb setting in dB (0.0 if disabled) as a
+.IR float .
+.PP
+.BR mpd_status_get_mixrampdelay ()
+returns mixrampdb setting in seconds (negative if disabled) as a
+.IR float .
+.PP
+.BR mpd_status_get_song_pos ()
+returns the position of the currently selected song (-1 if there is no current
+song) as a
+.IR int .
+.PP
+.BR mpd_status_get_song_pos ()
+returns the id of the currently selected song (-1 if there is no current
+song) as a
+.IR int .
+.PP
+.BR mpd_status_get_next_song_pos ()
+and
+.BR mpd_status_get_next_song_id (0
+returns the position and id of the next song to be played (-1 if there is no
+next song) as a
+.IR int ", respectively."
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_status_get_mixrampdb ()
+and
+.BR mpd_status_get_mixrampdelay ()
+functions were added to libmpdclient 2.2.
+.SH SEE ALSO
+.BR mpd_status_begin (3),
+.BR mpd_send_status (3),
+.BR mpd_run_status (3),
+.BR mpd_status_feed (3),
+.BR mpd_recv_status (3),
+.BR mpd_status_free (3),
+.BR mpd_status_get_volume (3),
+.BR mpd_status_get_repeat (3),
+.BR mpd_status_get_random (3),
+.BR mpd_status_get_single (3),
+.BR mpd_status_get_consume (3),
+.BR mpd_status_get_queue_length (3),
+.BR mpd_status_get_queue_version (3),
+.BR mpd_status_get_crossfade (3),
+.BR mpd_status_get_elapsed_time (3),
+.BR mpd_status_get_elapsed_ms (3),
+.BR mpd_status_get_total_time (3),
+.BR mpd_status_get_kbit_rate (3),
+.BR mpd_status_get_audio_format (3),
+.BR mpd_status_get_update_id (3),
+.BR mpd_status_get_error (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)

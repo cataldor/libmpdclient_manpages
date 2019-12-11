@@ -1,0 +1,143 @@
+.TH MPD_STATUS_GET_CROSSFADE 3 2019
+.SH NAME
+mpd_status_get_crossfade, mpd_status_get_elapsed_time,
+mpd_status_get_elapsed_ms, mpd_status_get_total_time, mpd_status_get_kbit_rate,
+mpd_status_get_audio_format, mpd_status_get_update_id, mpd_status_get_error \-
+query mpd_status information 
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "unsigned mpd_status_get_crossfade(const struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_elapsed_time(const struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_elapsed_ms(const struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_total_time(const struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_kbit_rate(const struct mpd_status *" status );
+.PP
+.BI "const struct mpd_audio_format *mpd_status_get_audio_format(const"
+.BI "struct mpd_status *" status );
+.PP
+.BI "unsigned mpd_status_get_update_id(const struct mpd_status *" status );
+.PP
+.BI "const char *mpd_status_get_error(const struct mpd_status *" status );
+.SH DESCRIPTION
+The
+.BR mpd_status_get_crossfade ()
+function returns crossfade setting in seconds in MPD
+.RI ( status ).
+0 means crossfading is disabled.
+.PP
+The
+.BR mpd_status_get_elapsed_time ()
+function returns the total time elapsed (of current playing/paused song) in
+seconds. This function uses a
+.IR "deprecated feature of MPD" ,
+you should call
+.BR mpd_status_get_elapsed_ms ()
+instead. The function receives the MPD
+.IR status .
+.PP
+The
+.BR mpd_status_get_elapsed_ms ()
+function returns the total time elapsed (of current playing/paused song) in
+milliseconds. The function receives the MPD
+.IR status .
+.PP
+The
+.BR mpd_status_get_total_time ()
+function returns the length in seconds of the currently playing/paused song. The
+function receives the MPD
+.IR status .
+.PP
+The
+.BR mpd_status_get_kbit_rate ()
+function returns the current bitrate in kbps of the currently playing/paused
+song (0 means unknown). The function receives the MPD 
+.IR status .
+.PP
+The
+.BR mpd_status_get_audio_format ()
+function returns the audio format which MPD is currently playing. May return
+NULL if MPD is not playing or if the audio format is unknown. The function
+receives the MPD
+.IR status .
+.PP
+The
+.BR mpd_status_get_update_id ()
+function returns 1 if mpd is updating, 0 otherwise. The function receives the
+MPD
+.IR status . 
+.PP
+The
+.BR mpd_status_get_error (),
+returns the error message (if any). The function receives the MPD
+.IR status .
+.SH RETURN VALUE
+.BR mpd_status_get_crossfade ()
+returns crossfade setting in seconds (0 if disabled) as a
+.IR unsigned .
+.PP
+.BR mpd_status_get_elapsed_time ()
+returns the total seconds elapsed of the currently playing/paused song (0 if
+there is no current song) as a 
+.IR unsinged .
+.PP
+.BR mpd_status_get_elapsed_ms ()
+returns the total milliseconds elapsed of the currently playing/paused song (0
+if there is no current song) as a 
+.IR unsinged .
+.PP
+.BR mpd_status_get_total_time ()
+returns the length in seconds of the currently playing/paused song (0 f there
+is no current song) as a
+.IR unsigned .
+.PP
+.BR mpd_status_get_kbit_rate ()
+returns the bitrate as kbps of  the currently playing/paused song (0 if there
+is no current song) as a
+.IR unsigned .
+.PP
+.BR mpd_status_get_audio_format ()
+returns the audio format of the currently playing/paused song (NULL if MPD is
+not playing or if the audio format is unknown) as a
+.I mpd_audio_format 
+object.
+.PP
+.BR mpd_status_get_error ()
+returns the error message in MPD (if any) as a
+.IR "const char *" .
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+The
+.BR mpd_status_get_elapsed_ms ()
+functions was added to libmpdclient 2.1.
+.SH SEE ALSO
+.BR mpd_status_begin (3),
+.BR mpd_send_status (3),
+.BR mpd_run_status (3),
+.BR mpd_status_feed (3),
+.BR mpd_recv_status (3),
+.BR mpd_status_free (3),
+.BR mpd_status_get_volume (3),
+.BR mpd_status_get_repeat (3),
+.BR mpd_status_get_random (3),
+.BR mpd_status_get_single (3),
+.BR mpd_status_get_consume (3),
+.BR mpd_status_get_queue_length (3),
+.BR mpd_status_get_queue_version (3),
+.BR mpd_status_get_state (3),
+.BR mpd_status_get_mixrampdb (3),
+.BR mpd_status_get_mixrampdelay (3),
+.BR mpd_status_get_song_pos (3),
+.BR mpd_status_get_song_id (3),
+.BR mpd_status_get_next_song_pos (3),
+.BR mpd_status_get_next_song_id (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
