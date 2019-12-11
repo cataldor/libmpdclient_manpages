@@ -1,0 +1,111 @@
+.TH MPD_SEND_STICKER_FIND 3 2019
+.SH NAME
+mpd_send_sticker_find, mpd_parse_sticker, mpd_recv_sticker,
+mpd_return_sticker \- manipulate sticker information on MPD songs
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_sticker_find(struct mpd_connection *" connection ","
+.BI "const char *" type ", const char *" base_uri ", const char *" name );
+.PP
+.BI "const char *mpd_parse_sticker(const char *" input ","
+.BI "size_t *" name_length_r );
+.PP
+.BI "struct mpd_pair *mpd_recv_sticker(struct mpd_connection *" connection );
+.PP
+.BI "void mpd_return_sticker(struct mpd_connection *" connection ","
+.BI "struct mpd_pair *" pair );
+.SH DESCRIPTION
+Stickers are pieces of information attached to existing MPD objects (e.g. song
+files, directories, albums; but currently, they are only implemented for song).
+Clients can create arbitrary name/value pairs. MPD itself does not assume any
+special meaning in them.  
+.PP
+The goal is to allow clients to share additional (possibly dynamic) information
+about songs, which is neither stored on the client (not available to other
+clients), nor stored in the song files (MPD has no write access).  
+.PP
+Client developers should create a standard for common sticker names, to
+ensure interoperability.  
+.PP
+Objects which may have stickers are addressed by their object type
+(\(lqsong\(rq for song objects) and their URI (the path within the database for
+songs).  
+.PP
+The
+.BR mpd_send_sticker_find ()
+function searches stickers of the object
+.I type
+with the base path
+.I base_uri
+containing the
+.IR name .
+Currently,
+.I type
+must be "song". 
+Use NULL on
+.I base_uri
+for searching all objects of the specified
+.IR type .
+You should call
+.BR mpd_recv_sticker ()
+to fetch the response. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_parse_sticker ()
+function parses a sticker
+.I input
+line in the form \(lqname=value\(rq and writes the length of the name into
+.IR name_length_r .
+.PP
+The
+.BR mpd_recv_sticker ()
+function receives the next sticker. You have to free the returned value with
+.BR mpd_return_sticker ().
+The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_return_sticker ()
+function frees the 
+.I pair
+returned by
+.BR mpd_recv_sticker ().
+The function also receives a
+.I connection
+to the MPD server. 
+.SH RETURN VALUE
+.BR mpd_send_sticker_find ()
+returns true on success, false on error.
+.PP
+.BR mpd_parse_sticker ()
+returns a pointer to the sticker value as a
+.IR "const char *" ,
+or NULL on error.
+.PP
+.BR mpd_recv_sticker ()
+returns a
+.I mpd_pair
+object on success, NULL on end-of-response or error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+All functions were added to libmpdclient 2.1.
+.SH SEE ALSO
+.BR mpd_send_sticker_set (3),
+.BR mpd_run_sticker_set (3),
+.BR mpd_send_sticker_delete (3),
+.BR mpd_run_sticker_delete (3),
+.BR mpd_send_sticker_get (3),
+.BR mpd_send_sticker_list (3),
+.BR mpd_parse_sticker (3),
+.BR mpd_recv_sticker (3),
+.BR mpd_return_sticker (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
