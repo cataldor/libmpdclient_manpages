@@ -1,0 +1,114 @@
+.TH MPD_TAG_NAME 3 2019
+.SH NAME
+mpd_tag_name, mpd_tag_name_parse, mpd_tag_name_iparse \- manipulate mpd_tag
+objects
+.SH SYNOPSIS
+.B #include <mpd/tag.h>
+.PP
+.BI "const char *mpd_tag_name(enum mpd_tag_type " type );
+.PP
+.BI "enum mpd_tag_type mpd_tag_name_parse(const char *" name );
+.PP
+.BI "enum mpd_tag_type mpd_tag_name_iparse(const char *" name );
+.SH DESCRIPTION
+The
+.BR mpd_tag_name ()
+function looks up the name of the specified tag
+.IR type .
+.PP
+The
+.BR mpd_tag_name_parse ()
+function parses a tag
+.IR name ,
+and returns its type.
+.PP
+The
+.BR mpd_tag_name_iparse ()
+function works the same as
+.BR mpd_tag_name_parse (),
+but ignores case.
+.SS The mpd_tag_type enum
+The
+.I mpd_tag_type
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT
+ * @since libmpdclient 2.17 added support for #MPD_TAG_LABEL and #MPD_TAG_MUSICBRAINZ_WORKID.
+ */
+enum mpd_tag_type
+{
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
+	MPD_TAG_ARTIST,
+	MPD_TAG_ALBUM,
+	MPD_TAG_ALBUM_ARTIST,
+	MPD_TAG_TITLE,
+	MPD_TAG_TRACK,
+	MPD_TAG_NAME,
+	MPD_TAG_GENRE,
+	MPD_TAG_DATE,
+	MPD_TAG_COMPOSER,
+	MPD_TAG_PERFORMER,
+	MPD_TAG_COMMENT,
+	MPD_TAG_DISC,
+
+	MPD_TAG_MUSICBRAINZ_ARTISTID,
+	MPD_TAG_MUSICBRAINZ_ALBUMID,
+	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
+	MPD_TAG_MUSICBRAINZ_TRACKID,
+	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+
+	MPD_TAG_ORIGINAL_DATE,
+
+	MPD_TAG_ARTIST_SORT,
+	MPD_TAG_ALBUM_ARTIST_SORT,
+
+	MPD_TAG_ALBUM_SORT,
+	MPD_TAG_LABEL,
+	MPD_TAG_MUSICBRAINZ_WORKID,
+
+	MPD_TAG_GROUPING,
+	MPD_TAG_WORK,
+	MPD_TAG_CONDUCTOR,
+
+	/* IMPORTANT: the ordering of tag types above must be
+	   retained, or else the libmpdclient ABI breaks */
+
+	MPD_TAG_COUNT
+};
+.EE
+.in
+.SH RETURN VALUE
+.BR mpd_tag_name ()
+returns the name of the specified tag 
+.IR type ,
+or NULL if the tag is not valid, as a
+.IR "const char *" .
+.PP
+.BR mpd_tag_name_parse()
+and
+.BR mpd_tag_name_iparse()
+return the tag type as a
+.I mpd_tag_type
+for the specified
+.IR name
+.RI ( MPD_TAG_UNKNOWN )
+if the
+.I name
+was not recognized.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH SEE ALSO
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
