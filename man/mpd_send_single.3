@@ -5,7 +5,13 @@ mpd_send_crossfade, mpd_run_crossfade \- manipulate MPD's playlist
 .SH SYNOPSIS
 .B #include <mpd/client.h>
 .PP
+.BI "bool mpd_send_single_state(const struct mpd_connection *" connection ","
+.BI "enum mpd_single_state " state );
+.PP
 .BI "bool mpd_send_single(struct mpd_connection *" connection );
+.PP
+.BI "bool mpd_run_single_state(struct mpd_connection *" connection ","
+.BI "enum mpd_single_state " state );
 .PP
 .BI "bool mpd_run_single(struct mpd_connection *" connection );
 .PP
@@ -20,6 +26,35 @@ mpd_send_crossfade, mpd_run_crossfade \- manipulate MPD's playlist
 .BI "unsigned " seconds );
 .SH DESCRIPTION
 The
+.BR mpd_send_single_state ()
+function sets single mode to on
+.RI ( MPD_SINGLE_ON ),
+off
+.RI ( MPD_SINGLE_OFF ),
+or oneshot
+.RI ( MPD_SINGLE_ONESHOT ).
+If
+.I state
+is set to on/oneshot, MPD enables single mode: playback is
+stopped after current song, or song is repeated if the repeat mode is enabled.
+Besides, if there is another song in the current playlist, and single mode is
+set to oneshot, MPD transition to
+.I MPD_SINGLE_OFF
+and the
+.I mpd_single_state
+object is
+.I not
+updated accordingly. In this case, you need to call
+.BR mpd_send_status (3)
+again. If
+.I state
+is set to off, MPD disables single mode: if random mode
+is enabled, the playlist order is shuffled after it is played completely. The
+function also receives a
+.I connection
+to the MPD server.
+.PP
+The
 .BR mpd_send_single ()
 function sets single mode on/off for the playlist. If
 .I mode
@@ -30,6 +65,14 @@ is false, MPD disables single mode: if random mode is enabled, the playlist
 order is shuffled after it is played completely. The function also receives a
 .I connection
 to the MPD server.
+.IR "This function is deprecated, you should avoid it" .
+.PP
+The
+.BR mpd_run_single_state ()
+function is a shortcut for
+.BR mpd_send_single_state ()
+and
+.BR mpd_response_finish (3).
 .PP
 The
 .BR mpd_run_single ()
@@ -37,6 +80,7 @@ function is a shortcut for
 .BR mpd_send_single ()
 and
 .BR mpd_response_finish (3).
+.IR "This function is deprecated, you should avoid it" .
 .PP
 The
 .BR mpd_send_consume ()
@@ -71,8 +115,43 @@ function is a shortcut for
 .BR mpd_send_crossfade ()
 and
 .BR mpd_response_finish (3).
+.SS The mpd_single_state enum
+The
+.IR mpd_single_state
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * MPD's single state.
+ *
+ * @since libmpdclient 2.18, MPD 0.21.
+ */
+enum mpd_single_state {
+	/** disabled */
+	MPD_SINGLE_OFF = 0,
+
+	/** enabled */
+	MPD_SINGLE_ON,
+
+	/**
+	 * enables single state (#MPD_SINGLE_ONESHOT) for a single song, then
+	 * MPD disables single state (#MPD_SINGLE_OFF) if the current song
+	 * has played and there is another song in the current playlist
+	 *
+	 * @since MPD 0.21
+	 **/
+	MPD_SINGLE_ONESHOT,
+
+	/** Unknown state */
+	MPD_SINGLE_UNKNOWN,
+};
+.EE
+.in
 .SH RETURN VALUE
+.BR mpd_send_single_state (),
 .BR mpd_send_single (),
+.BR mpd_run_single_state (),
 .BR mpd_run_single (),
 .BR mpd_send_consume (),
 .BR mpd_run_consume (),
@@ -89,6 +168,12 @@ The
 .BR mpd_send_consume (),
 .BR mpd_run_single ()
 functions use commands added to MPD 0.15.
+.PP
+The
+.BR mpd_status_send_single_state ()
+and
+.BR mpd_status_run_single_state ()
+functions were added to libmpdclient 2.18 (MPD 0.21).
 .SH SEE ALSO
 .BR mpd_response_finish (3),
 .BR mpd_send_current_song (3),

@@ -12,6 +12,9 @@ mpd_status_get_queue_version \- query mpd_status information
 .PP
 .BI "bool mpd_status_get_random(const struct mpd_status *" status );
 .PP
+.BI "enum mpd_single_state mpd_status_get_single_state(const"
+.BI "struct mpd_status *" status );
+.PP
 .BI "bool mpd_status_get_single(const struct mpd_status *" status );
 .PP
 .BI "bool mpd_status_get_consume(const struct mpd_status *" status );
@@ -38,9 +41,15 @@ function returns true if random mode is on or false if random mode is off in MPD
 .RI ( status ).
 .PP
 The
+.BR mpd_status_get_single_state ()
+function returns the current state of single mode in MPD
+.RI ( status ).
+.PP
+The
 .BR mpd_status_get_single ()
 function returns true if single mode is on or false if single mode is off in MPD
 .RI ( status ).
+.IR "This function is deprecated, you should avoid it" .
 .PP
 The
 .BR mpd_status_get_consume ()
@@ -60,11 +69,49 @@ function returns the queue version number on the MPD
 .RI ( status );
 you may use this to determine when the queue has changed since you last
 queried it.
+.SS The mpd_single_state enum
+The
+.IR mpd_single_state
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * MPD's single state.
+ *
+ * @since libmpdclient 2.18, MPD 0.21.
+ */
+enum mpd_single_state {
+	/** disabled */
+	MPD_SINGLE_OFF = 0,
+
+	/** enabled */
+	MPD_SINGLE_ON,
+
+	/**
+	 * enables single state (#MPD_SINGLE_ONESHOT) for a single song, then
+	 * MPD disables single state (#MPD_SINGLE_OFF) if the current song
+	 * has played and there is another song in the current playlist
+	 *
+	 * @since MPD 0.21
+	 **/
+	MPD_SINGLE_ONESHOT,
+
+	/** Unknown state */
+	MPD_SINGLE_UNKNOWN,
+};
+.EE
+.in
 .SH RETURN VALUE
 .BR mpd_status_get_volume ()
 returns the current volume in MPD as a
 .I int 
 from 0 to 100, or -1 when there is no volume.
+.PP
+.BR mpd_status_get_single_state ()
+returns the state of single mode in MPD as a
+.I mpd_single_state
+object.
 .PP
 .BR mpd_status_get_repeat (),
 .BR mpd_status_get_random (),
@@ -84,6 +131,10 @@ returns the version of the queue as a 31-bit
 .SH ERRORS
 The user should use one of the error functions of libmpdclient for
 error-checking.
+.SH HISTORY
+The
+.BR mpd_status_get_single_state ()
+functions was added to libmpdclient 2.18 (MPD 0.21).
 .SH SEE ALSO
 .BR mpd_status_begin (3),
 .BR mpd_send_status (3),
