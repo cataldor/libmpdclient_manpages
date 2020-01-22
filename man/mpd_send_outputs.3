@@ -1,9 +1,10 @@
-.TH MPD_SEND_OUTPUTS 3 2019
+.TH MPD_SEND_OUTPUTS 3 2020
 .SH NAME
 mpd_send_outputs, mpd_recv_output, mpd_send_enable_output, 
 mpd_run_enable_output, mpd_send_disable_output, mpd_run_disable_output,
 mpd_send_toggle_output, mpd_run_toggle_output, mpd_send_output_set,
-mpd_run_output_set \- manipulate outputs with the MPD server
+mpd_run_output_set, mpd_send_move_output, mpd_run_move_output \- manipulate
+outputs with the MPD server
 .SH SYNOPSIS
 .B #include <mpd/client.h>
 .PP
@@ -36,6 +37,12 @@ mpd_run_output_set \- manipulate outputs with the MPD server
 .BI "bool mpd_run_output_set(struct mpd_connection *" connection ","
 .BI "unsigned " output_id ", const char *" attribute_name ","
 .BI "const char *" attribute_value );
+.PP
+.BI "bool mpd_send_move_output(struct mpd_connection *" connection ","
+.BI "const char *" output_name );
+.PP
+.BI "bool mpd_run_move_output(struct mpd_connection *" connection ","
+.BI "const char *" output_name );
 .SH DESCRIPTION
 The
 .BR mpd_send_outputs ()
@@ -116,6 +123,21 @@ function is a shortcut for
 .BR mpd_send_output_set ()
 and
 .BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_move_output ()
+function moves the output named
+.I output_name
+to the current partition. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_move_output ()
+function is a shortcut for
+.BR mpd_send_move_output ()
+and
+.BR mpd_response_finish (3).
 .SH RETURN VALUE
 .BR mpd_send_outputs (),
 .BR mpd_send_enable_output (),
@@ -125,7 +147,9 @@ and
 .BR mpd_send_toggle_output (),
 .BR mpd_run_toggle_output (),
 .BR mpd_send_output_set (),
-.BR mpd_run_output_set ()
+.BR mpd_run_output_set (),
+.BR mpd_send_move_output (),
+.BR mpd_run_move_output (),
 return true on success, false on error.
 .PP
 .BR mpd_recv_output ()
@@ -147,6 +171,12 @@ The
 and
 .BR mpd_run_output_set ()
 function were added to libmpdclient 2.14 and to MPD 0.21.
+.PP
+The
+.BR mpd_send_move_output ()
+and
+.BR mpd_run_move_output ()
+function were added to libmpdclient 2.18 and to MPD 0.22.
 .SH SEE ALSO
 .BR mpd_output_begin (3),
 .BR mpd_output_feed (3),
