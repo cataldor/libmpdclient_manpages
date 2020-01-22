@@ -1,7 +1,8 @@
-.TH MPD_SEND_NEWPARTITION 3 2019
+.TH MPD_SEND_NEWPARTITION 3 2020
 .SH NAME
-mpd_send_newpartition, mpd_run_newpartition, mpd_send_switch_partition, 
-mpd_run_switch_partition, mpd_send_listpartitions, mpd_recv_partition_pair \-
+mpd_send_newpartition, mpd_run_newpartition, mpd_send_delete_partition,
+mpd_run_delete_partition, mpd_send_switch_partition, mpd_run_switch_partition,
+mpd_send_listpartitions, mpd_recv_partition_pair, mpd_recv_partition \-
 manipulate MPD partitions
 .SH SYNOPSIS
 .B #include <mpd/client.h>
@@ -10,6 +11,12 @@ manipulate MPD partitions
 .BI "const char *" partition );
 .PP
 .BI "bool mpd_run_newpartition(struct mpd_connection *" connection ","
+.BI "const char *" partition );
+.PP
+.BI "bool mpd_send_delete_partition(struct mpd_connection *" connection ","
+.BI "const char *" partition );
+.PP
+.BI "bool mpd_run_delete_partition(struct mpd_connection *" connection ","
 .BI "const char *" partition );
 .PP
 .BI "bool mpd_send_switch_partition(struct mpd_connection *" connection ","
@@ -21,6 +28,9 @@ manipulate MPD partitions
 .BI "bool mpd_send_listpartitions(struct mpd_connection *" connection );
 .PP
 .BI "struct mpd_pair *mpd_recv_partition_pair(struct"
+.BI "mpd_connection *" connection );
+.PP
+.BI "struct mpd_partition *mpd_recv_partition(struct"
 .BI "mpd_connection *" connection );
 .SH DESCRIPTION
 The
@@ -37,6 +47,21 @@ The
 .BR mpd_run_newpartition ()
 function is a shortcut for
 .BR mpd_send_newpartition ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
+.BR mpd_send_delete_partition ()
+function deletes a partition named
+.IR partition .
+The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_delete_partition ()
+function is a shortcut for
+.BR mpd_send_delete_partition ()
 and
 .BR mpd_response_finish (3).
 .PP
@@ -58,7 +83,9 @@ and
 The
 .BR mpd_send_listpartitions ()
 function sends the \(lqlistpartitions\(rq command: request the list of
-partitions. The function receives a
+partitions. Call
+.BR mpd_recv_partition ()
+repeatedly to read the response. The function receives a
 .I connection
 to the MPD server.
 .PP
@@ -71,9 +98,21 @@ Free the return value with
 The function receives a
 .I connection
 to the MPD server.
+.PP
+The
+.BR mpd_recv_partition ()
+function reads the next
+.I mpd_partition
+object from the MPD response. Free the return value with
+.BR mpd_partition_free ().
+The function receives a
+.I connection
+to the MPD server.
 .SH RETURN VALUE
 .BR mpd_send_newpartition (),
 .BR mpd_run_newpartition (),
+.BR mpd_send_delete_partition (),
+.BR mpd_run_delete_partition (),
 .BR mpd_send_switch_partition (),
 .BR mpd_run_switch_partition (),
 .BR mpd_send_listpartitions ()
@@ -83,11 +122,29 @@ return true on success, false on error.
 returns a \(lqpartition\(rq
 .IR pair ,
 or NULL on error or if the end of the response is reached.
+.PP
+.BR mpd_recv_partition ()
+returns a newly allocated mpd_partition
+.I object
+on succes, NULL on error or end-of-response.
 .SH ERRORS
 The user should use one of the error functions of libmpdclient for
 error-checking.
 .SH HISTORY
-All functions were added to libmpdclient 2.17.
+The functions
+.BR mpd_send_newpartition (),
+.BR mpd_run_newpartition (),
+.BR mpd_send_switch_partition (),
+.BR mpd_run_switch_partition (),
+.BR mpd_send_listpartitions (),
+.BR mpd_recv_partition_pair ()
+were added to libmpdclient 2.17.
+.PP
+The functions
+.BR mpd_send_delete_partition (),
+.BR mpd_run_delete_partition (),
+.BR mpd_recv_partition ()
+were added to libmpdclient 2.18.
 .SH SEE ALSO
 .BR mpd_response_finish (3),
 .BR mpd_return_pair (3),
