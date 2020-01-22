@@ -1,0 +1,129 @@
+.TH MPD_PARSE_REPLAY_GAIN_NAME 3 2020
+.SH NAME
+mpd_parse_replay_gain_name, mpd_send_replay_gain_status,
+mpd_run_replay_gain_status, mpd_send_replay_gain_mode,
+mpd_run_replay_gain_mode \- fetch/set ReplayGain information from the
+MPD server
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "enum mpd_replay_gain_mode mpd_parse_replay_gain_mode(const"
+.BI "char *" name );
+.PP
+.BI "bool mpd_send_replay_gain_status(struct connection *" connection );
+.PP
+.BI "enum mpd_replay_gain_mode mpd_run_replay_gain_status(struct"
+.BI "connection *" connection );
+.PP
+.BI "bool mpd_send_replay_gain_mode(struct connection *" connection ","
+.BI "enum mpd_replay_gain_mode " mode );
+.PP
+.BI "bool mpd_run_replay_gain_mode(struct connection *" connection ","
+.BI "enum mpd_replay_gain_mode " mode );
+.SH DESCRIPTION
+The
+.BR mpd_parse_replay_gain_mode ()
+function parses a mpd_pair
+.I value
+to check which replay gain mode it contains.
+.PP
+The
+.BR mpd_send_replay_gain_status ()
+function queries the current state of replay gain mode on MPD. You should call
+.BR mpd_recv_pair (3)
+to read response lines. The mpd_pair
+.I name
+should be \(lqreplay_gain_mode\(rq. Use
+.BR mpd_parse_replay_gain_mode ()
+to check each pair's 
+.IR value .
+The function receives a valid and connected
+.IR connection .
+.PP
+The
+.BR mpd_run_replay_gain_status ()
+is a shortcut for
+.BR mpd_send_replay_gain_status () ,
+.BR mpd_recv_pair_named (3) , 
+and
+.BR mpd_response_finish (3) .
+The function receives a valid and connected
+.I connection
+object.
+.PP
+The
+.BR mpd_send_replay_gain_mode ()
+function sets the current state of replay gain mode on MPD. The function 
+receives a valid and connected
+.I connection
+object.
+.PP
+The
+.BR mpd_run_replay_gain_mode ()
+is a shortcut for
+.BR mpd_send_replay_gain_mode ()
+and
+.BR mpd_response_finish (3).
+.SS The mpd_replay_gain_mode enum
+The
+.IR mpd_replay_gain_mode
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+/**
+ * MPD's replay gain mode.
+ *
+ * @since libmpdclient 2.19, MPD 0.16.
+ */
+enum mpd_replay_gain_mode {
+	/** ignore ReplayGain tag values */
+	MPD_REPLAY_OFF = 0,
+
+	/** use per-track ReplayGain values */
+	MPD_REPLAY_TRACK,
+
+	/** use per-album ReplayGain values */
+	MPD_REPLAY_ALBUM,
+
+	/**
+	 * use available ReplayGain value; if both track and album tags are
+	 * available, prefer track values.
+	 **/
+	MPD_REPLAY_AUTO,
+
+	/** Unknown mode */
+	MPD_REPLAY_UNKNOWN,
+};
+.EE
+.in
+.SH RETURN VALUE
+.BR mpd_parse_fingerprint_type ()
+returns the type of the
+.I mpd_pair
+value.
+.PP
+.BR mpd_send_replay_gain_status (),
+.BR mpd_send_replay_gain_mode(),
+.BR mpd_run_replay_gain_mode()
+returns true on success or false on error.
+.PP
+.BR mpd_run_replay_gain_status ()
+returns a 
+.I mpd_replay_gain_mode
+object: 
+.I MPD_REPLAY_UNKNOWN
+on error (or unknown replaygain mode); other modes on success.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+These functions appeared in libmpdclient 2.19 and MPD 0.16.
+.SH SEE ALSO
+.BR mpd_recv_pair (3),
+.BR mpd_recv_pair_named (3),
+.BR mpd_response_finish (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
