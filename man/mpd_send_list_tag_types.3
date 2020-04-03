@@ -1,7 +1,7 @@
-.TH MPD_SEND_LIST_TAG_TYPES 3 2019
+.TH MPD_SEND_LIST_TAG_TYPES 3 2020
 .SH NAME
-mpd_send_list_tag_types, mpd_recv_tag_pair \- requests/receives a list 
-of supported tag types
+mpd_send_list_tag_types, mpd_recv_tag_pair, mpd_send_all_tag_types,
+mpd_run_all_tag_types \- requests/receives a list of supported tag types
 .SH SYNOPSIS
 .B #include <mpd/client.h>
 .PP
@@ -9,19 +9,41 @@ of supported tag types
 .PP
 .BI "struct mpd_pair *mpd_recv_tag_type_pair(struct"
 .BI "mpd_connection *" connection );
+.PP
+.BI "bool mpd_send_all_tag_types(struct mpd_connection *"connection );
+.PP
+.BI "bool mpd_run_all_tag_types(struct mpd_connection *"connection );
 .SH DESCRIPTION
 The
 .BR mpd_send_list_tag_types ()
 requests a list of supported tag types. The user should use
 .BR mpd_recv_tag_type_pair ()
-to obtain the list of tag pairs.
+to obtain the list of tag pairs. The function receives a
+.I connection
+to the MPD server.
 .PP
 .BR mpd_recv_tag_type_pair ()
 returns one tag of the
 .BR mpd_send_list_tag_types ()
 response. Free the returned value with
 .BR mpd_return_pair ().
-
+The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_send_all_tag_types()
+requests that all tag types be sent to this client (default for new clients).
+The function receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_all_tag_types()
+is a shortcut for
+.BR mpd_send_all_tag_types()
+and
+.BR mpd_response_finish(3).
 .SS The mpd_pair structure
 The
 .BR mpd_recv_tag_types_pair ()
@@ -50,18 +72,21 @@ returns true on success, false otherwise. The function is a wrapper of
 .BR mpd_send_command ().
 .PP
 .BR mpd_recv_tag_types_pair ()
-returns a tagtype pair, or NULL on error of if the end of the response is
-reached.
+returns a tagtype 
+.IR pair ,
+or NULL on error of if the end of the response is reached.
+.PP
+.BR mpd_send_all_tag_types()
+and
+.BR mpd_run_all_tag_types()
+return true on success, false otherwise.
 .SH ERRORS
-If 
-.BR mpd_send_list_tag_types()
-or
-.BR mpd_recv_tag_type_pair()
-function return false and NULL (respectively), the user should use one of the
-error functions of libmpdclient.
+If these functions function return false or NULL, the user should use one of
+the error functions of libmpdclient.
 .SH SEE ALSO
 .BR mpd_send_command(3),
 .BR mpd_connection_new (3),
 .BR mpd_connect_new_async (3),
 .BR mpd_connection_get_error (3),
-.BR mpd_connection_get_error_message (3)
+.BR mpd_connection_get_error_message (3),
+.BR mpd_response_finish (3)
