@@ -1,14 +1,16 @@
 .TH MPD_PARSE_REPLAY_GAIN_NAME 3 2020
 .SH NAME
-mpd_parse_replay_gain_name, mpd_send_replay_gain_status,
-mpd_run_replay_gain_status, mpd_send_replay_gain_mode,
-mpd_run_replay_gain_mode \- fetch/set ReplayGain information from the
-MPD server
+mpd_parse_replay_gain_name, mpd_lookup_replay_gain_mode,
+mpd_send_replay_gain_status, mpd_run_replay_gain_status,
+mpd_send_replay_gain_mode, mpd_run_replay_gain_mode \- fetch/set ReplayGain 
+information from the MPD server
 .SH SYNOPSIS
 .B #include <mpd/client.h>
 .PP
 .BI "enum mpd_replay_gain_mode mpd_parse_replay_gain_mode(const"
 .BI "char *" name );
+.PP
+.BI "const char *mpd_lookup_replay_gain_mode(enum mpd_replay_gain_mode " mode );
 .PP
 .BI "bool mpd_send_replay_gain_status(struct connection *" connection );
 .PP
@@ -26,6 +28,11 @@ The
 function parses a mpd_pair
 .I value
 to check which replay gain mode it contains.
+.PP
+The
+.BR mpd_lookup_replay_gain_mode ()
+function looks up the name of the specified replay gain
+.IR mode .
 .PP
 The
 .BR mpd_send_replay_gain_status ()
@@ -102,6 +109,11 @@ enum mpd_replay_gain_mode {
 returns the type of the
 .I mpd_pair
 value.
+.PP
+.BR mpd_lookup_replay_gain_mode ()
+returns the name as a
+.IR "const char *"
+or NULL if the replay gain mode is invalid.
 .PP
 .BR mpd_send_replay_gain_status (),
 .BR mpd_send_replay_gain_mode(),
