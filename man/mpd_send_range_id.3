@@ -1,0 +1,104 @@
+.TH MPD_SEND_RANGE_ID 3 2020
+.SH NAME
+mpd_send_range_id, mpd_run_range_id \- play a given portion of a song
+.SH SYNOPSIS
+.B #include <mpd/client.h>
+.PP
+.BI "bool mpd_send_range_id(struct mpd_connection *" connection ","
+.BI "unsigned " id ", float " start ", float " end );
+.PP
+.BI "bool mpd_run_range_id(struct mpd_connection *" connection ","
+.BI "unsigned " id ", float " start ", float " end );
+.SH DESCRIPTION
+The
+.BR mpd_send_range_id ()
+function specifies the portion of a song
+.I id
+that shall be played. The song
+.I cannot
+be the currently playing song.
+The
+.I start
+and
+.I end
+values are offsets in seconds (fractional seconds allowed); both are optional.
+A negative
+.I end
+value makes the end of the range open. The function also receives a
+.I connection
+to the MPD server.
+.PP
+The
+.BR mpd_run_range_id ()
+function is a shortcut for
+.BR mpd_send_range_id ()
+and
+.BR mpd_response_finish (3).
+.SH RETURN VALUE
+All functions return true on success, false on error.
+.SH ERRORS
+The user should use one of the error functions of libmpdclient for
+error-checking.
+.SH HISTORY
+.BR mpd_send_range_id ()
+and
+.BR mpd_run_range_id ()
+were added to libmpdclient 2.19 and MPD 0.20.
+.SH SEE ALSO
+.BR mpd_response_finish (3),
+.BR mpd_send_list_queue_meta (3),
+.BR mpd_send_list_queue_range_meta (3),
+.BR mpd_send_get_queue_song_pos (3),
+.BR mpd_run_get_queue_song_pos (3),
+.BR mpd_send_get_queue_song_id (3),
+.BR mpd_run_get_queue_song_id (3),
+.BR mpd_send_queue_changes_meta (3),
+.BR mpd_send_queue_changes_meta_range (3),
+.BR mpd_send_queue_changes_brief (3),
+.BR mpd_send_queue_changes_brief_range (3),
+.BR mpd_recv_queue_change_brief (3),
+.BR mpd_send_add (3),
+.BR mpd_run_add (3),
+.BR mpd_send_add_id (3),
+.BR mpd_run_add_id (3),
+.BR mpd_send_add_id_to (3),
+.BR mpd_run_add_id_to (3),
+.BR mpd_recv_song_id (3),
+.BR mpd_send_delete (3),
+.BR mpd_run_delete (3),
+.BR mpd_send_delete_range (3),
+.BR mpd_run_delete_range (3),
+.BR mpd_send_delete_id (3),
+.BR mpd_run_delete_id (3),
+.BR mpd_send_shuffle (3),
+.BR mpd_run_shuffle (3),
+.BR mpd_send_shuffle_range (3),
+.BR mpd_run_shuffle_range (3),
+.BR mpd_send_move (3),
+.BR mpd_run_move (3),
+.BR mpd_send_move_id (3),
+.BR mpd_run_move_id (3),
+.BR mpd_send_move_range (3),
+.BR mpd_run_move_range (3),
+.BR mpd_send_swap (3),
+.BR mpd_run_swap (3),
+.BR mpd_send_swap_id (3),
+.BR mpd_run_swap_id (3),
+.BR mpd_send_add_tag_id (3),
+.BR mpd_run_add_tag_id (3),
+.BR mpd_send_clear_tag_id (3),
+.BR mpd_run_clear_tag_id (3),
+.BR mpd_send_clear_all_tag_id (3),
+.BR mpd_run_clear_all_tag_id (3),
+.BR mpd_send_prio (3),
+.BR mpd_run_prio (3),
+.BR mpd_send_prio_range (3),
+.BR mpd_run_prio_range (3),
+.BR mpd_send_prio_id (3),
+.BR mpd_run_prio_id (3),
+.BR mpd_send_clear (3),
+.BR mpd_run_clear (3),
+.BR mpd_connection_get_error (3),
+.BR mpd_connection_get_error_message (3),
+.BR mpd_connection_get_server_error (3),
+.BR mpd_connection_get_system_error (3)
