@@ -1,8 +1,8 @@
 .TH MPD_SEND_PLAYLIST_CLEAR 3 2019
 .SH NAME
-mpd_send_playlist_clear, mpd_run_playlist_clear, mpd_send_playlist_add, 
-mpd_run_playlist_add, mpd_send_playlist_move, mpd_send_playlist_delete,
-mpd_run_playlist_delete \- manipulate MPD's playlists
+mpd_send_playlist_clear, mpd_run_playlist_clear, mpd_send_playlist_add,
+mpd_run_playlist_add, mpd_send_playlist_move, mpd_run_playlist_move,
+mpd_send_playlist_delete, mpd_run_playlist_delete \- manipulate MPD's playlists
 .SH SYNOPSIS
 .B #include <mpd/client.h>
 .PP
@@ -19,6 +19,9 @@ mpd_run_playlist_delete \- manipulate MPD's playlists
 .BI "const char *" name ", const char *" path );
 .PP
 .BI "bool mpd_send_playlist_move(struct mpd_connection *" connection ","
+.BI "const char *" name ", unsigned " from ", unsigned " to );
+.PP
+.BI "bool mpd_run_playlist_move(struct mpd_connection *" connection ","
 .BI "const char *" name ", unsigned " from ", unsigned " to );
 .PP
 .BI "bool mpd_send_playlist_delete(struct mpd_connection *" connection ","
@@ -76,6 +79,13 @@ The function also receives a
 to the MPD server.
 .PP
 The
+.BR mpd_run_playlist_move ()
+function is a shortcut for
+.BR mpd_send_playlist_move ()
+and
+.BR mpd_response_finish (3).
+.PP
+The
 .BR mpd_send_playlist_delete ()
 function deletes the position
 .I pos
@@ -96,6 +106,10 @@ All functions return true on success, false on error.
 .SH ERRORS
 The user should use one of the error functions of libmpdclient for
 error-checking.
+.SH HISTORY
+The
+.BR mpd_run_playlist_move ()
+function was added since libmpdclient 2.19.
 .SH SEE ALSO
 .BR mpd_response_finish (3),
 .BR mpd_playlist_free (3),
